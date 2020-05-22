@@ -52,3 +52,34 @@ print.zotero_api <- function(x, ...) {
   cat("<Zotero API request>\n")
   print(x$response)
 }
+
+
+
+
+
+
+
+
+
+# Extract the links to subsequent queries (pages) from Zotero response
+#
+# @param r response
+#
+# Returns tibble with
+#
+# - id number
+# - url the link
+# - rel value in the rel field, one of: next, last, alternate
+#
+zotero_response_links <- function(r, ...) {
+  # Links to the the other pages of the resultset
+  strsplit(r$response$headers$link, ", ") %>%
+    unlist() %>%
+    tibble::enframe(name = "id", value = "link") %>%
+    tidyr::extract(
+      link,
+      into = c("url", "rel"),
+      '<(.*)>; rel="([a-z]+)"'
+    )
+
+}
