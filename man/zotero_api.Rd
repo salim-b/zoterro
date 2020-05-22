@@ -5,7 +5,7 @@
 \alias{print.zotero_api}
 \title{Make Zotero API request}
 \usage{
-zotero_api(query, path, base_url = "https://api.zotero.org", ...)
+zotero_api(path, query = NULL, base_url = "https://api.zotero.org", ...)
 
 \method{print}{zotero_api}(x, ...)
 }

@@ -12,7 +12,7 @@
 #'
 #' @import httr
 #' @export
-zotero_api <- function(query, path, base_url = "https://api.zotero.org", ...) {
+zotero_api <- function(path, query = NULL, base_url = "https://api.zotero.org", ...) {
   u <- modify_url(
     base_url,
     path = path,
