@@ -1,0 +1,33 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# zoterro
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Zoterro is a simple R client to Zotero web API (ver. 3).
+
+
+
+
+## Installation
+
+Development version from [GitHub](https://github.com/) with:
+
+```{r install, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("mbojan/zoterro")
+```
