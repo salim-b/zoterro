@@ -2,25 +2,36 @@
 #'
 #' Make Zotero APIv3 request.
 #'
-#' @param query,path Request parameters
 #' @param base_url API URL
 #' @param ... For [zotero_api()] passed to [httr::GET()].
-#'
-#' @details
 #'
 #' @return List of class `zotero_api` with elements `content` and `response`.
 #'
 #' @import httr
 #' @export
-zotero_api <- function(path, query = NULL, base_url = "https://api.zotero.org", ...) {
-  u <- modify_url(
-    base_url,
-    path = path,
-    query = query
-  )
+
+zotero_api <- function(base_url = "https://api.zotero.org", ...) {
+  need_fetch <- TRUE
+  result <- NULL
+  while(need_fetch) {
+    r <- zotero_get(base_url = base_url, ...)
+    c(result, list(r))
+    if(has_next(r)) {
+      needs_fetch <- TRUE
+      Sys.sleep(getOption("zotero.sleep", 1))
+    } else {
+      needs_fetch <- FALSE
+    }
+    parse_results(result)
+  }
+}
+
+
+# Make a single request
+zotero_get <- function(base_url = "https://api.zotero.org", ...) {
   resp <- GET(
-    url = u,
-    add_headers(
+    url = base_url,
+    config = add_headers(
       "Zotero-API-Key" = zotero_key(),
       "Zotero-API-Version" = 3
     ),
@@ -31,13 +42,8 @@ zotero_api <- function(path, query = NULL, base_url = "https://api.zotero.org", 
       sprintf("Zotero request failed with HTTP error [%s]", status_code(resp))
     )
   }
-  structure(
-    list(
-      content = content(resp),
-      response = resp
-    ),
-    class = "zotero_api"
-  )
+
+  resp
 }
 
 
