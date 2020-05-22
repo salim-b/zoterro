@@ -65,21 +65,16 @@ print.zotero_api <- function(x, ...) {
 #
 # @param r response
 #
-# Returns tibble with
-#
-# - id number
-# - url the link
-# - rel value in the rel field, one of: next, last, alternate
+# Returns named character vector with names from: first, prev, next, last. URL
+# named alternate leads to corresponding webpage.
 #
 zotero_response_links <- function(r, ...) {
   # Links to the the other pages of the resultset
-  strsplit(r$response$headers$link, ", ") %>%
-    unlist() %>%
-    tibble::enframe(name = "id", value = "link") %>%
-    tidyr::extract(
-      link,
-      into = c("url", "rel"),
-      '<(.*)>; rel="([a-z]+)"'
-    )
-
+  r$response$headers$link %>%
+    strsplit(", ") %>%
+    unlist() -> z
+  structure(
+    stringi::stri_extract_first_regex(z, "(?<=<).*(?=>)"),
+    names = stringi::stri_extract_first_regex(z, '(?<=").*(?=")')
+  )
 }
