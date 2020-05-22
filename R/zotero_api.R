@@ -10,6 +10,7 @@
 #'
 #' @return List of class `zotero_api` with elements `content` and `response`.
 #'
+#' @import httr
 #' @export
 zotero_api <- function(query, path, base_url = "https://api.zotero.org", ...) {
   u <- modify_url(
