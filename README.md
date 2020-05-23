@@ -19,11 +19,12 @@ available.
 
 ## Installation
 
-Development version from [GitHub](https://github.com/) with:
+Install development version from
+[GitHub](https://github.com/mbojan/zoterro) with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("mbojan/zoterro")
+# install.packages("remotes")
+remotes::install_github("mbojan/zoterro")
 ```
 
 ## Examples
