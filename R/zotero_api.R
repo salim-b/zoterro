@@ -84,10 +84,25 @@ zotero_response_links <- function(r, ...) {
   )
 }
 
-
+# Is there a "next" link in the header?
 has_next <- function(r) {
   "next" %in% names(zotero_response_links(r))
 }
 
 
-parse_results <- function(r) identity(r)
+# Content type of the response
+response_content_type <- function(r) {
+  r$headers[["content-type"]]
+}
+
+
+# Given a list of GET responses return a useful object
+#
+# @param r
+#
+parse_results <- function(x, ...) UseMethod("parse_results")
+
+# By default extract content
+parse_results.default <- function(x, ...) {
+  do.call("c", lapply(x, content))
+}
