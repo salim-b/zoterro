@@ -11,19 +11,17 @@
 #' @export
 
 zotero_api <- function(base_url = "https://api.zotero.org", ...) {
-  need_fetch <- TRUE
-  result <- NULL
-  while(need_fetch) {
-    r <- zotero_get(base_url = base_url, ...)
-    c(result, list(r))
-    if(has_next(r)) {
-      needs_fetch <- TRUE
+  resp <- zotero_get(base_url = base_url, ...)
+  result <- list(resp)
+  while(has_next(resp)) {
+    l <- zotero_response_links(resp)
+    resp <- zotero_get(l["next"])
+    result <- c(result, list(resp))
+    if(has_next(resp)) {
       Sys.sleep(getOption("zotero.sleep", 1))
-    } else {
-      needs_fetch <- FALSE
     }
-    parse_results(result)
   }
+  parse_results(result) # List of responses
 }
 
 
@@ -62,7 +60,7 @@ print.zotero_api <- function(x, ...) {
 
 
 
-
+#' @import magrittr
 
 
 
@@ -75,8 +73,9 @@ print.zotero_api <- function(x, ...) {
 # named alternate leads to corresponding webpage.
 #
 zotero_response_links <- function(r, ...) {
+  if(is.null(r$headers$link)) return(FALSE)
   # Links to the the other pages of the resultset
-  r$response$headers$link %>%
+  r$headers$link %>%
     strsplit(", ") %>%
     unlist() -> z
   structure(
@@ -84,3 +83,11 @@ zotero_response_links <- function(r, ...) {
     names = stringi::stri_extract_first_regex(z, '(?<=").*(?=")')
   )
 }
+
+
+has_next <- function(r) {
+  "next" %in% names(zotero_response_links(r))
+}
+
+
+parse_results <- function(r) identity(r)

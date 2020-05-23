@@ -5,13 +5,11 @@
 \alias{print.zotero_api}
 \title{Make Zotero API request}
 \usage{
-zotero_api(path, query = NULL, base_url = "https://api.zotero.org", ...)
+zotero_api(base_url = "https://api.zotero.org", ...)
 
 \method{print}{zotero_api}(x, ...)
 }
 \arguments{
-\item{query, path}{Request parameters}
-
 \item{base_url}{API URL}
 
 \item{...}{For \code{\link[=zotero_api]{zotero_api()}} passed to \code{\link[httr:GET]{httr::GET()}}.}
@@ -21,7 +19,4 @@ List of class \code{zotero_api} with elements \code{content} and \code{response}
 }
 \description{
 Make Zotero APIv3 request.
-}
-\details{
-
 }
