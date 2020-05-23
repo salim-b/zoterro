@@ -1,5 +1,7 @@
 ---
 output: github_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -13,7 +15,33 @@ knitr::opts_chunk$set(
 )
 ```
 
-# zoterro
+```{r logo, include=FALSE, eval=FALSE}
+library(tidyverse)
+library(hexSticker)
+
+p <- data.frame(x=1, y=1) %>%
+  ggplot(aes(x=x, y=y)) +
+  ggimage::geom_image(image="~/Downloads/zorro_hat.png")
+
+sticker(
+  "~/Downloads/zorro_hat.png",
+  
+  package = "zoterro",
+  p_size = 20,
+  s_x = 1,
+  s_y = 0.75,
+  s_width = 0.6,
+  h_fill = "#DF0025",
+  url = "https://mbojan.github.io/zoterro",
+  filename = "man/figures/logo.png"
+)
+```
+
+
+
+
+
+# zoterro  <img src="man/figures/logo.png" align="right" width="20%" />
 
 <!-- badges: start -->
 <!-- badges: end -->
