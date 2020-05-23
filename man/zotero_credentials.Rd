@@ -21,6 +21,6 @@ zotero_key()
 }
 \details{
 Best practice is to store both the user ID and the key in
-read-protected \code{.Renviron} as environment variables. The two functions
-\code{ZOTERO_USER} and \code{ZOTERO_KEY} respectively.
+read-protected \verb{~/.Renviron} as environment variables. The two functions
+look at \code{ZOTERO_USER} and \code{ZOTERO_KEY} respectively.
 }

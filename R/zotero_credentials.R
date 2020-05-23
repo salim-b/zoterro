@@ -5,8 +5,8 @@
 #' @description - `zotero_key()` - return Zotero key
 #'
 #' @details Best practice is to store both the user ID and the key in
-#'   read-protected `.Renviron` as environment variables. The two functions
-#'   `ZOTERO_USER` and `ZOTERO_KEY` respectively.
+#'   read-protected `~/.Renviron` as environment variables. The two functions
+#'   look at `ZOTERO_USER` and `ZOTERO_KEY` respectively.
 #'
 #' @name zotero_credentials
 #'
