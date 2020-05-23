@@ -15,6 +15,9 @@ zotero_api <- function(base_url = "https://api.zotero.org", ...) {
   result <- list(resp)
   while(has_next(resp)) {
     l <- zotero_response_links(resp)
+    if(getOption("zoterro.verbose", FALSE)) {
+      pretty_links(l)
+    }
     resp <- zotero_get(l["next"])
     result <- c(result, list(resp))
     if(has_next(resp)) {
@@ -96,6 +99,16 @@ response_content_type <- function(r) {
 }
 
 
+pretty_links <- function(x) {
+  cat(
+    paste(names(x), x, sep=": "),
+    sep="\n"
+  )
+}
+
+
+
+
 # Given a list of GET responses return a useful object
 #
 # @param r
@@ -106,3 +119,7 @@ parse_results <- function(x, ...) UseMethod("parse_results")
 parse_results.default <- function(x, ...) {
   do.call("c", lapply(x, content))
 }
+
+
+
+
