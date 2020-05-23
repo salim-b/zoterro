@@ -2,6 +2,7 @@
 #'
 #' @param key collection key, see [collections()]
 #' @param format output format
+#' @param ... other arguments
 #'
 #' @export
 
@@ -10,7 +11,8 @@ collection_items <- function(key, format="bibtex", ...) {
     path = paste("users", zotero_usr(), "collections", key, "items", sep = "/"),
     query = list(
       format = format
-    )
+    ),
+    ...
   )
   rawToChar(r)
 }

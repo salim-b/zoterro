@@ -2,12 +2,9 @@
 % Please edit documentation in R/zotero_api.R
 \name{zotero_api}
 \alias{zotero_api}
-\alias{print.zotero_api}
 \title{Make Zotero API request}
 \usage{
 zotero_api(base_url = "https://api.zotero.org", ...)
-
-\method{print}{zotero_api}(x, ...)
 }
 \arguments{
 \item{base_url}{API URL}

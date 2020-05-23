@@ -14,6 +14,8 @@ save_collection(key, path, ...)
 
 \item{format}{output format}
 
+\item{...}{other arguments}
+
 \item{path}{path to bibtex file}
 }
 \description{

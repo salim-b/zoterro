@@ -54,18 +54,6 @@ zotero_get <- function(base_url = "https://api.zotero.org", ...) {
 
 
 
-#' @rdname zotero_api
-#' @export
-print.zotero_api <- function(x, ...) {
-  cat("<Zotero API request>\n")
-  print(x$response)
-}
-
-
-
-
-
-
 
 # Extract the links to subsequent queries (pages) from Zotero response
 #
