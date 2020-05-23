@@ -4,7 +4,7 @@
 \alias{zotero_credentials}
 \alias{zotero_usr}
 \alias{zotero_key}
-\title{Acess Zotero username and key from environment variables.}
+\title{Get Zotero username and key}
 \usage{
 zotero_usr()
 
@@ -20,7 +20,13 @@ zotero_key()
 }
 }
 \details{
-Best practice is to store both the user ID and the key in
-read-protected \verb{~/.Renviron} as environment variables. The two functions
-look at \code{ZOTERO_USER} and \code{ZOTERO_KEY} respectively.
+These functions look for Zotero user ID and key by looking into the
+following places and returning as soon as a value found:
+\itemize{
+\item Options \code{zotero.user} and \code{zotero.key} respectively
+\item Environment variables \code{ZOTERO_USER} and \code{ZOTERO_KEY} respectively.
+}
+
+Best practice is to store both the user ID and the key in read-protected
+\verb{~/.Renviron} as environment variables.
 }
