@@ -7,7 +7,6 @@
 #'
 #' @return List of class `zotero_api` with elements `content` and `response`.
 #'
-#' @import httr
 #' @export
 
 zotero_api <- function(base_url = "https://api.zotero.org", ...) {
@@ -29,6 +28,8 @@ zotero_api <- function(base_url = "https://api.zotero.org", ...) {
 
 
 # Make a single request
+#
+#' @import httr
 zotero_get <- function(base_url = "https://api.zotero.org", ...) {
   resp <- GET(
     url = base_url,
@@ -63,8 +64,6 @@ print.zotero_api <- function(x, ...) {
 
 
 
-#' @import magrittr
-
 
 
 
@@ -75,6 +74,7 @@ print.zotero_api <- function(x, ...) {
 # Returns named character vector with names from: first, prev, next, last. URL
 # named alternate leads to corresponding webpage.
 #
+#' @import magrittr
 zotero_response_links <- function(r, ...) {
   if(is.null(r$headers$link)) return(FALSE)
   # Links to the the other pages of the resultset

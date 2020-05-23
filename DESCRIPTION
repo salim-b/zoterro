@@ -8,7 +8,7 @@ Authors@R:
            email = "michal2992@gmail.com",
            comment = c(ORCID = "0000-0001-7503-852X"))
 Description: Accessing Zotero web API to fetch/put/manipulate bibliographical data.
-Import: httr, magrittr, purrr, dplyr
+Imports: httr, magrittr, purrr, dplyr, stringi
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
