@@ -35,10 +35,20 @@ zotero_api <- function(base_url = "https://api.zotero.org", ...) {
 # Make a single request
 #
 #' @import httr
-zotero_get <- function(base_url = "https://api.zotero.org", ...) {
-  base_url <- modify_url(base_url, path = url_prefix(zotero_usr()))
+zotero_get <- function(
+  base_url = "https://api.zotero.org",
+  user = zotero_usr(),
+  path = NULL,
+  query = NULL,
+  ...
+) {
+  u <- modify_url(
+    base_url,
+    path = paste(url_prefix(user), path, sep="/"),
+    query = query
+  )
   resp <- GET(
-    url = base_url,
+    url = u,
     config = add_headers(
       "Zotero-API-Key" = zotero_key(),
       "Zotero-API-Version" = 3

@@ -1,3 +1,19 @@
+context("Simple requests")
+
+test_that("Request using user id", {
+  r <- zotero_get(
+    path = "collections/top"
+  )
+})
+
+test_that("Request using group id", {
+  r <- zotero_get(
+    path = "collections/top",
+    user = zotero_group_id(2389504)
+  )
+})
+
+
 context("Basic API requests")
 
 test_that("fetching group IDs works", {
