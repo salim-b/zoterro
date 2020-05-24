@@ -34,3 +34,39 @@ zotero_key <- function() {
   if(Sys.getenv("ZOTERO_KEY") != "") return(Sys.getenv("ZOTERO_KEY"))
   stop("no Zotero key found, see ?zoterro::zotero_credentials")
 }
+
+
+
+
+
+
+
+# Processing IDs ----------------------------------------------------------
+
+zotero_user_id <- function(id) {
+  stopifnot(length(id) == 1)
+  structure(id, class=c("zotero_user_id", "zotero_id"))
+}
+
+zotero_group_id <- function(id) {
+  stopifnot(length(id) == 1)
+  structure(id, class=c("zotero_group_id", "zotero_id"))
+}
+
+#' @rdname zotero_credentials
+#' @export
+format.zotero_user_id <- function(x, ...) {
+  paste0("users/", x)
+}
+
+#' @rdname zotero_credentials
+#' @export
+format.zotero_group_id <- function(x, ...) {
+  paste0("groups/", x)
+}
+
+#' @rdname zotero_credentials
+#' @export
+print.zotero_id <- function(x, ...) {
+  cat("Zotero ID:", x, "\n")
+}
