@@ -42,3 +42,12 @@ The function is responsive to the following options:
 \item \code{zoterro.sleep} - (default 1) sleep time between requests, see \code{\link[=Sys.sleep]{Sys.sleep()}}
 }
 }
+\examples{
+\dontrun{
+# Fetch groups for the default user
+zotero_api(path = "groups")
+
+# Fetch top-level collections for the group with ID=12345
+zotero_api(path="collections/top", user=zotero_group_id(12345))
+}
+}

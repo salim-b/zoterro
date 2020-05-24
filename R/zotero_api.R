@@ -24,6 +24,15 @@
 #' @return List of `response` objects (c.f. [httr::GET()]).
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Fetch groups for the default user
+#' zotero_api(path = "groups")
+#'
+#' # Fetch top-level collections for the group with ID=12345
+#' zotero_api(path="collections/top", user=zotero_group_id(12345))
+#' }
 
 zotero_api <- function(
   base_url = "https://api.zotero.org",
