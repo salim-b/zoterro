@@ -41,14 +41,24 @@ zotero_api <- function(
   user = zotero_usr(),
   ...
   ) {
-  resp <- zotero_get(base_url = base_url, path=path, query=query, user=user, ...)
+
+  u <- modify_url(
+    base_url,
+    path = paste(url_prefix(user), path, sep="/"),
+    query = query
+  )
+
+  resp <- zotero_get(
+    url = u,
+    ...
+    )
   result <- list(resp)
   while(has_next(resp)) {
     l <- zotero_response_links(resp)
     if(getOption("zoterro.verbose", FALSE)) {
       pretty_links(l)
     }
-    resp <- zotero_get(base_url = l["next"], ...)
+    resp <- zotero_get(url = l["next"], ...)
     result <- c(result, list(resp))
     if(has_next(resp)) {
       Sys.sleep(getOption("zoterro.sleep", 1))
@@ -62,28 +72,25 @@ zotero_api <- function(
 #
 #' @import httr
 zotero_get <- function(
-  base_url = "https://api.zotero.org",
-  user = zotero_usr(),
-  path = NULL,
-  query = NULL,
+  url,
   ...
 ) {
-  u <- modify_url(
-    base_url,
-    path = paste(url_prefix(user), path, sep="/"),
-    query = query
-  )
   resp <- GET(
-    url = u,
+    url = url,
     config = add_headers(
       "Zotero-API-Key" = zotero_key(),
       "Zotero-API-Version" = 3
     ),
     ...
   )
+
   if(http_error(resp)) {
     stop(
-      sprintf("Zotero request failed with HTTP error [%s]", status_code(resp))
+      sprintf(
+        "Zotero request failed with HTTP error [%s]\n<%s>",
+        status_code(resp),
+        resp$request$url
+        )
     )
   }
 
