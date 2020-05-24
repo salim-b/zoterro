@@ -3,23 +3,21 @@
 \name{collection_items}
 \alias{collection_items}
 \alias{save_collection}
-\title{Fetch all items of a collection}
+\title{Fetch all items in a collection}
 \usage{
-collection_items(key, format = "bibtex", ...)
+collection_items(key, ...)
 
 save_collection(key, path, ...)
 }
 \arguments{
 \item{key}{collection key, see \code{\link[=collections]{collections()}}}
 
-\item{format}{output format}
+\item{...}{other arguments passed to \code{\link[=zotero_api]{zotero_api()}}}
 
-\item{...}{other arguments}
-
-\item{path}{path to bibtex file}
+\item{path}{path to file}
 }
 \description{
 \itemize{
-\item \code{save_collection()} - Write BibTeX file with all items in a collection
+\item \code{save_collection()} - Write BibTeX file \code{path} with all items in a collection
 }
 }

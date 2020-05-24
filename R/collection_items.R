@@ -1,29 +1,27 @@
-#' Fetch all items of a collection
+#' Fetch all items in a collection
 #'
 #' @param key collection key, see [collections()]
-#' @param format output format
-#' @param ... other arguments
+#' @param ... other arguments passed to [zotero_api()]
 #'
 #' @export
 
-collection_items <- function(key, format="bibtex", ...) {
-  r <- zotero_api(
-    path = paste("users", zotero_usr(), "collections", key, "items", sep = "/"),
-    query = list(
-      format = format
-    ),
+collection_items <- function(key, ...) {
+  zotero_api(
+    path = paste("collections", key, "items", sep="/"),
     ...
   )
-  rawToChar(r)
 }
 
 #' @rdname collection_items
 #'
-#' @description - `save_collection()` - Write BibTeX file with all items in a collection
+#' @description - `save_collection()` - Write BibTeX file `path` with all items in a collection
 #'
-#' @param path path to bibtex file
+#' @param path path to file
 #'
 #' @export
 save_collection <- function(key, path, ...) {
-  cat(collection_items(key, ...), file=path)
+  cat(
+    rawToChar(collection_items(key, query = list(format = "bibtex"), ...)),
+    file = path
+  )
 }
