@@ -1,12 +1,14 @@
 context("Simple requests")
 
 test_that("Request using user id", {
+  skip("interactive only")
   r <- zotero_get(
     path = "collections/top"
   )
 })
 
 test_that("Request using group id", {
+  skip("interactive only")
   r <- zotero_get(
     path = "collections/top",
     user = zotero_group_id(2389504)
