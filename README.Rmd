@@ -24,7 +24,7 @@ p <- data.frame(x=1, y=1) %>%
   ggimage::geom_image(image="~/Downloads/zorro_hat.png")
 
 sticker(
-  "img-raw/zorro_hat.png",
+  "img-raw/zoterro.png",
   
   package = "zoterro",
   p_size = 20,
