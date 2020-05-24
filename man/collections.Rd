@@ -2,7 +2,7 @@
 % Please edit documentation in R/collections.R
 \name{collections}
 \alias{collections}
-\title{Fetch data on collections}
+\title{Fetch all collections collections}
 \usage{
 collections(...)
 }
@@ -18,5 +18,5 @@ Data frame with columns:
 }
 }
 \description{
-Fetch all collections.
+Fetch all collections of a Zotero user
 }

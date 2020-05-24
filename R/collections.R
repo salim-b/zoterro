@@ -1,6 +1,6 @@
-#' Fetch data on collections
+#' Fetch all collections collections
 #'
-#' Fetch all collections.
+#' Fetch all collections of a Zotero user
 #'
 #' @param ... passed to [zotero_api()]
 #'
@@ -15,7 +15,7 @@
 
 collections <- function(...) {
   r <- zotero_api(
-    path = paste("users", zotero_usr(), "collections", sep="/"),
+    path = "collections",
     ...
   )
 
