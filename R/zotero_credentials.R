@@ -86,3 +86,7 @@ url_prefix.zotero_user_id <- function(x, ...) {
 url_prefix.zotero_group_id <- function(x, ...) {
   paste0("groups/", x)
 }
+
+url_prefix.default <- function(x, ...) {
+  stop("don't know how to handle class ", sQuote(data.class(x)))
+}
