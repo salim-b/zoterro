@@ -29,16 +29,18 @@ remotes::install_github("mbojan/zoterro")
 
 ## Examples
 
-  - Fetch all items from collection with key `aabbcc` and save to BibTeX
-    file `references.bib`.
+  - Fetch all items from collection with (fictious) key `aabbcc` and
+    save to BibTeX file `references.bib`.
     
     ``` r
-    collection_items("aabbcc", path = "references.bib")
+    save_collection("aabbcc", path = "references.bib")
     ```
 
-  - `zotero_api()` will make multiple requests if the results are split
-    into multiple batches:
+  - `zotero_api()` is a low-level function. It will make multiple
+    requests if the results do not fit a single response. The following
+    will fetch all collection names and their keys associated with a
+    (fictious) user ID 666:
     
     ``` r
-    zotero_api(path="users/666/collections")
+    zotero_api(path="collections")
     ```
