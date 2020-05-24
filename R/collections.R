@@ -1,6 +1,7 @@
-#' Fetch all collections collections
+#' Fetch collection hierarchy
 #'
-#' Fetch all collections of a Zotero user
+#' Fetch all collections of a Zotero user with their keys and keys of parent
+#' collections (if any).
 #'
 #' @param ... passed to [zotero_api()]
 #'

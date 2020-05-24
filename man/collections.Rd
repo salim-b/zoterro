@@ -2,7 +2,7 @@
 % Please edit documentation in R/collections.R
 \name{collections}
 \alias{collections}
-\title{Fetch all collections collections}
+\title{Fetch collection hierarchy}
 \usage{
 collections(...)
 }
@@ -18,5 +18,6 @@ Data frame with columns:
 }
 }
 \description{
-Fetch all collections of a Zotero user
+Fetch all collections of a Zotero user with their keys and keys of parent
+collections (if any).
 }
