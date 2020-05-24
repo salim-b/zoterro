@@ -5,7 +5,12 @@
 #' @param base_url API URL
 #' @param ... For [zotero_api()] passed to [httr::GET()].
 #'
-#' @return List of class `zotero_api` with elements `content` and `response`.
+#' @details Functions are responsive to the following options:
+#'
+#' - `zoterro.verbose` - (default `FALSE`) give more feedback when running
+#' - `zoterro.sleep` - (default 1) sleep time between requests, see [Sys.sleep()]
+#'
+#' @return List of `response` objects (c.f. [httr::GET()]).
 #'
 #' @export
 
@@ -107,7 +112,3 @@ parse_results <- function(x, ...) UseMethod("parse_results")
 parse_results.default <- function(x, ...) {
   do.call("c", lapply(x, content))
 }
-
-
-
-

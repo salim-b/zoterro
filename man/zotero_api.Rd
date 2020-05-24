@@ -12,8 +12,15 @@ zotero_api(base_url = "https://api.zotero.org", ...)
 \item{...}{For \code{\link[=zotero_api]{zotero_api()}} passed to \code{\link[httr:GET]{httr::GET()}}.}
 }
 \value{
-List of class \code{zotero_api} with elements \code{content} and \code{response}.
+List of \code{response} objects (c.f. \code{\link[httr:GET]{httr::GET()}}).
 }
 \description{
 Make Zotero APIv3 request.
+}
+\details{
+Functions are responsive to the following options:
+\itemize{
+\item \code{zoterro.verbose} - (default \code{FALSE}) give more feedback when running
+\item \code{zoterro.sleep} - (default 1) sleep time between requests, see \code{\link[=Sys.sleep]{Sys.sleep()}}
+}
 }
