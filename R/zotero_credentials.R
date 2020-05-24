@@ -66,18 +66,23 @@ zotero_group_id <- function(id) {
 #' @param ... other arguments
 #'
 #' @export
-format.zotero_user_id <- function(x, ...) {
+print.zotero_id <- function(x, ...) {
+  cat("Zotero ID:", x, "\n")
+}
+
+
+
+
+
+
+# URL prefix with user/group ID -------------------------------------------
+
+url_prefix <- function(x, ...) UseMethod("url_prefix")
+
+url_prefix.zotero_user_id <- function(x, ...) {
   paste0("users/", x)
 }
 
-#' @rdname zotero_credentials
-#' @export
-format.zotero_group_id <- function(x, ...) {
+url_prefix.zotero_group_id <- function(x, ...) {
   paste0("groups/", x)
-}
-
-#' @rdname zotero_credentials
-#' @export
-print.zotero_id <- function(x, ...) {
-  cat("Zotero ID:", x, "\n")
 }
