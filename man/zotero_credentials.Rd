@@ -4,18 +4,12 @@
 \alias{zotero_credentials}
 \alias{zotero_usr}
 \alias{zotero_key}
-\alias{format.zotero_user_id}
-\alias{format.zotero_group_id}
 \alias{print.zotero_id}
 \title{Get Zotero username and key}
 \usage{
 zotero_usr()
 
 zotero_key()
-
-\method{format}{zotero_user_id}(x, ...)
-
-\method{format}{zotero_group_id}(x, ...)
 
 \method{print}{zotero_id}(x, ...)
 }

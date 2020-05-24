@@ -52,7 +52,7 @@ zotero_key <- function() {
 
 zotero_user_id <- function(id) {
   stopifnot(length(id) == 1)
-  structure(id, class=c("zotero_user_id", "zotero_id"))
+  structure(as.numeric(id), class=c("zotero_user_id", "zotero_id"))
 }
 
 zotero_group_id <- function(id) {
