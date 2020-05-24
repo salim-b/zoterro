@@ -36,6 +36,7 @@ zotero_api <- function(base_url = "https://api.zotero.org", ...) {
 #
 #' @import httr
 zotero_get <- function(base_url = "https://api.zotero.org", ...) {
+  base_url <- modify_url(base_url, path = url_prefix(zotero_usr()))
   resp <- GET(
     url = base_url,
     config = add_headers(
