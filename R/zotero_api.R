@@ -14,15 +14,21 @@
 #'
 #' @export
 
-zotero_api <- function(base_url = "https://api.zotero.org", ...) {
-  resp <- zotero_get(base_url = base_url, ...)
+zotero_api <- function(
+  base_url = "https://api.zotero.org",
+  query = NULL,
+  path = NULL,
+  user = zotero_usr(),
+  ...
+  ) {
+  resp <- zotero_get(base_url = base_url, path=path, query=query, user=user, ...)
   result <- list(resp)
   while(has_next(resp)) {
     l <- zotero_response_links(resp)
     if(getOption("zoterro.verbose", FALSE)) {
       pretty_links(l)
     }
-    resp <- zotero_get(l["next"])
+    resp <- zotero_get(base_url = l["next"], ...)
     result <- c(result, list(resp))
     if(has_next(resp)) {
       Sys.sleep(getOption("zoterro.sleep", 1))
