@@ -25,10 +25,18 @@ zotero_api(
 List of \code{response} objects (c.f. \code{\link[httr:GET]{httr::GET()}}).
 }
 \description{
-Make Zotero APIv3 request.
+Fetch data from Zotero using API ver. 3. If the result is broken into
+multiple parts, multiple requests are made to fetch everything.
 }
 \details{
-Functions are responsive to the following options:
+The \code{user} argument expects Zotero user or group ID. Use \code{\link[=zotero_user_id]{zotero_user_id()}}
+or \code{\link[=zotero_group_id]{zotero_group_id()}} to pass it. By default \code{\link[=zoter_usr]{zoter_usr()}} is called which
+fetches the ID from the option or the environment variable.
+
+The URL of the request will contain the appropriate user/group ID prefix
+which will be combined with \code{path} or \code{query} when supplied.
+
+The function is responsive to the following options:
 \itemize{
 \item \code{zoterro.verbose} - (default \code{FALSE}) give more feedback when running
 \item \code{zoterro.sleep} - (default 1) sleep time between requests, see \code{\link[=Sys.sleep]{Sys.sleep()}}

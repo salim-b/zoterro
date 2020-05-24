@@ -1,13 +1,22 @@
 #' Make Zotero API request
 #'
-#' Make Zotero APIv3 request.
+#' Fetch data from Zotero using API ver. 3. If the result is broken into
+#' multiple parts, multiple requests are made to fetch everything.
 #'
 #' @param base_url API URL
 #' @param path,query passed to [modify_url()]
 #' @param user object returned by [zotero_user_id()] or [zotero_group_id()]
 #' @param ... For [zotero_api()] passed to [httr::GET()].
 #'
-#' @details Functions are responsive to the following options:
+#' @details
+#' The `user` argument expects Zotero user or group ID. Use [zotero_user_id()]
+#' or [zotero_group_id()] to pass it. By default [zoter_usr()] is called which
+#' fetches the ID from the option or the environment variable.
+#'
+#' The URL of the request will contain the appropriate user/group ID prefix
+#' which will be combined with `path` or `query` when supplied.
+#'
+#' The function is responsive to the following options:
 #'
 #' - `zoterro.verbose` - (default `FALSE`) give more feedback when running
 #' - `zoterro.sleep` - (default 1) sleep time between requests, see [Sys.sleep()]
