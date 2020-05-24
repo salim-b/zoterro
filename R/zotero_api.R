@@ -20,7 +20,7 @@ zotero_api <- function(base_url = "https://api.zotero.org", ...) {
     resp <- zotero_get(l["next"])
     result <- c(result, list(resp))
     if(has_next(resp)) {
-      Sys.sleep(getOption("zotero.sleep", 1))
+      Sys.sleep(getOption("zoterro.sleep", 1))
     }
   }
   parse_results(result) # List of responses
