@@ -18,9 +18,16 @@
 #' @export
 
 zotero_usr <- function() {
-  if(!is.null(getOption("zotero.user"))) return(getOption("zotero.user"))
-  if(Sys.getenv("ZOTERO_USER") != "") return(Sys.getenv("ZOTERO_USER"))
-  stop("no Zotero user ID found, see ?zoterro::zotero_credentials")
+  id <- if(!is.null(getOption("zotero.user"))) {
+    getOption("zotero.user")
+  } else {
+    if(Sys.getenv("ZOTERO_USER") != "") {
+      Sys.getenv("ZOTERO_USER")
+    } else {
+      stop("no Zotero user ID found, see ?zoterro::zotero_credentials")
+    }
+  }
+  zotero_user_id(id)
 }
 
 
