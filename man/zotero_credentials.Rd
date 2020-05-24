@@ -19,6 +19,11 @@ zotero_key()
 
 \method{print}{zotero_id}(x, ...)
 }
+\arguments{
+\item{x}{Zotero user/group ID}
+
+\item{...}{other arguments}
+}
 \description{
 \itemize{
 \item \code{zotero_usr()} - return Zotero user ID

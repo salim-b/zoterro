@@ -61,6 +61,10 @@ zotero_group_id <- function(id) {
 }
 
 #' @rdname zotero_credentials
+#'
+#' @param x Zotero user/group ID
+#' @param ... other arguments
+#'
 #' @export
 format.zotero_user_id <- function(x, ...) {
   paste0("users/", x)
