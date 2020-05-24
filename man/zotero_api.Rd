@@ -4,10 +4,20 @@
 \alias{zotero_api}
 \title{Make Zotero API request}
 \usage{
-zotero_api(base_url = "https://api.zotero.org", ...)
+zotero_api(
+  base_url = "https://api.zotero.org",
+  query = NULL,
+  path = NULL,
+  user = zotero_usr(),
+  ...
+)
 }
 \arguments{
 \item{base_url}{API URL}
+
+\item{path, query}{passed to \code{\link[=modify_url]{modify_url()}}}
+
+\item{user}{object returned by \code{\link[=zotero_user_id]{zotero_user_id()}} or \code{\link[=zotero_group_id]{zotero_group_id()}}}
 
 \item{...}{For \code{\link[=zotero_api]{zotero_api()}} passed to \code{\link[httr:GET]{httr::GET()}}.}
 }

@@ -3,6 +3,8 @@
 #' Make Zotero APIv3 request.
 #'
 #' @param base_url API URL
+#' @param path,query passed to [modify_url()]
+#' @param user object returned by [zotero_user_id()] or [zotero_group_id()]
 #' @param ... For [zotero_api()] passed to [httr::GET()].
 #'
 #' @details Functions are responsive to the following options:
