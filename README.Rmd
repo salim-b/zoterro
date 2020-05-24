@@ -47,11 +47,9 @@ sticker(
 [![R build status](https://github.com/mbojan/zoterro/workflows/R-CMD-check/badge.svg)](https://github.com/mbojan/zoterro/actions)
 <!-- badges: end -->
 
-Zoterro is a simple R client to Zotero web API (ver. 3).
+[Zotero](https://www.zotero.org/) is a free tool for collecting, organizing, and citing research developed by [Corporation for Digital Scholarship](https://digitalscholar.org/). Zoterro (with double "r") is a simple R client to Zotero web API (ver. 3) with which you can access the data associated with your account or groups you are a member of.
 
-Primary motivation was a need to fetch bibliographical information managed by Zotero to local RMarkdown project.
-
-See https://www.zotero.org/support/dev/web_api/v3/basics for what is available.
+See [Zotero API documentation](https://www.zotero.org/support/dev/web_api/v3) for what is available.
 
 
 ## Installation
