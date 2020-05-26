@@ -30,7 +30,7 @@ multiple parts, multiple requests are made to fetch everything.
 }
 \details{
 The \code{user} argument expects Zotero user or group ID. Use \code{\link[=zotero_user_id]{zotero_user_id()}}
-or \code{\link[=zotero_group_id]{zotero_group_id()}} to pass it. By default \code{\link[=zoter_usr]{zoter_usr()}} is called which
+or \code{\link[=zotero_group_id]{zotero_group_id()}} to pass it. By default \code{\link[=zotero_usr]{zotero_usr()}} is called which
 fetches the ID from the option or the environment variable.
 
 The URL of the request will contain the appropriate user/group ID prefix

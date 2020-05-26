@@ -54,8 +54,8 @@ zotero_key <- function() {
 
 #' @rdname zotero_credentials
 #'
-#' @description `zotero_user_id()`, `zotero_group_id()` - supply user/group ID to
-#'   other functions
+#' @description `zotero_user_id()`, `zotero_group_id()` - supply user/group ID
+#'   to other functions
 #'
 #' @param id user or group iD
 #'

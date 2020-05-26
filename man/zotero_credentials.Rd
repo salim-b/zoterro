@@ -40,8 +40,8 @@ of class "zotero_user_id" and "zotero_group_id", both inheriting from class
 \item \code{zotero_key()} - return Zotero key
 }
 
-\code{zotero_user_id()}, \code{zotero_group_id()} - supply user/group ID to
-other functions
+\code{zotero_user_id()}, \code{zotero_group_id()} - supply user/group ID
+to other functions
 }
 \details{
 These functions look for Zotero user ID and key by looking into the

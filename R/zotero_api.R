@@ -10,7 +10,7 @@
 #'
 #' @details
 #' The `user` argument expects Zotero user or group ID. Use [zotero_user_id()]
-#' or [zotero_group_id()] to pass it. By default [zoter_usr()] is called which
+#' or [zotero_group_id()] to pass it. By default [zotero_usr()] is called which
 #' fetches the ID from the option or the environment variable.
 #'
 #' The URL of the request will contain the appropriate user/group ID prefix
