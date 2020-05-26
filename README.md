@@ -7,6 +7,8 @@
 
 [![R build
 status](https://github.com/mbojan/zoterro/workflows/R-CMD-check/badge.svg)](https://github.com/mbojan/zoterro/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/zoterro)](https://CRAN.R-project.org/package=zoterro)
 <!-- badges: end -->
 
 [Zotero](https://www.zotero.org/) is a free tool for collecting,

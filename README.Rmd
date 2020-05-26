@@ -45,6 +45,7 @@ sticker(
 
 <!-- badges: start -->
 [![R build status](https://github.com/mbojan/zoterro/workflows/R-CMD-check/badge.svg)](https://github.com/mbojan/zoterro/actions)
+[![CRAN status](https://www.r-pkg.org/badges/version/zoterro)](https://CRAN.R-project.org/package=zoterro)
 <!-- badges: end -->
 
 [Zotero](https://www.zotero.org/) is a free tool for collecting, organizing, and citing research developed by [Corporation for Digital Scholarship](https://digitalscholar.org/). Zoterro (with double "r") is a simple R client to Zotero web API (ver. 3) with which you can access the data associated with your account or groups you are a member of.
