@@ -50,11 +50,31 @@ zotero_key <- function() {
 
 # Processing IDs ----------------------------------------------------------
 
+
+
+#' @rdname zotero_credentials
+#'
+#' @description `zotero_user_id()`, `zotero_group_id()` - supply user/group ID to
+#'   other functions
+#'
+#' @param id user or group iD
+#'
+#' @details Functions `zotero_user_id()` and `zotero_group_id()` are used to
+#'   supply user or group ID to other functions in the package, primarly
+#'   [zotero_api()].
+#'
+#' @return Functions `zotero_user_id()` and `zotero_group_id()` return objects
+#'   of class "zotero_user_id" and "zotero_group_id", both inheriting from class
+#'   "zotero_id".
+#'
+#' @export
 zotero_user_id <- function(id) {
   stopifnot(length(id) == 1)
   structure(as.numeric(id), class=c("zotero_user_id", "zotero_id"))
 }
 
+#' @rdname zotero_credentials
+#' @export
 zotero_group_id <- function(id) {
   stopifnot(length(id) == 1)
   structure(id, class=c("zotero_group_id", "zotero_id"))
