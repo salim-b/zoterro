@@ -20,11 +20,15 @@ public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostat
 organizing, and citing research developed by [Corporation for Digital
 Scholarship](https://digitalscholar.org/). Zoterro (with double “r”) is
 a simple R client to Zotero web API (ver. 3) with which you can access
-the data associated with your account or groups you are a member of.
+the data of public groups, associated with your account, or groups you
+are a member of.
 
-See [Zotero API
+The client implements convenience functions for fetching data using
+probably the most frequently needed end points. API endpoints without a
+convinient wrapper (yet) can still be accessed using the low-level
+interface provided by `zotero_api()`. See [Zotero API
 documentation](https://www.zotero.org/support/dev/web_api/v3/start) for
-what is available.
+what endpoints are available.
 
 ## Installation
 
