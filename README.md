@@ -23,8 +23,8 @@ a simple R client to Zotero web API (ver. 3) with which you can access
 the data associated with your account or groups you are a member of.
 
 See [Zotero API
-documentation](https://www.zotero.org/support/dev/web_api/v3) for what
-is available.
+documentation](https://www.zotero.org/support/dev/web_api/v3/start) for
+what is available.
 
 ## Installation
 
