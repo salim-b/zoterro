@@ -1,5 +1,3 @@
-id <- zotero_group_id(269768)
-
 # Fetch my publications
 u <- "https://api.zotero.org/users/311682/publications/items"
 
@@ -11,13 +9,16 @@ r <- GET(
   )
 )
 
+(libver <- r$headers$`last-modified-version`)
+
 # With version header
 r2 <- GET(
   url = u,
   config = add_headers(
     "Zotero-API-Key" = zotero_key(),
     "Zotero-API-Version" = 3,
-    # "If-Modified-Since-Version" = 2469
-    "If-Modified-Since" = "2020-06-01T17:50:00Z"
+    "If-Modified-Since-Version" = libver
   )
 )
+
+identical(http_status(r2), http_status(304))
