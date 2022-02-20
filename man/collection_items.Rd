@@ -18,14 +18,14 @@ see \code{\link[=collections]{collections()}}.}
 
 \item{...}{Other arguments passed to \code{\link[=zotero_api]{zotero_api()}}}
 
-\item{path}{path to file}
+\item{path}{Path to file.}
 }
 \value{
 A \link[tibble:tbl_df-class]{tibble} if \code{as_tibble = TRUE}, otherwise a list.
 }
 \description{
 \itemize{
-\item \code{save_collection()} - Write BibTeX file \code{path} with all items in a collection
+\item \code{save_collection()}: Write BibTeX file \code{path} with all items in a collection.
 }
 }
 \examples{

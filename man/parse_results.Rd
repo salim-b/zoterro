@@ -7,7 +7,7 @@
 parse_results(x, ...)
 }
 \arguments{
-\item{r}{}
+\item{x}{A list of GET responses.}
 }
 \description{
 Given a list of GET responses return a useful object

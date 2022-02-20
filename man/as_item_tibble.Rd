@@ -7,16 +7,19 @@
 as_item_tibble(items)
 }
 \arguments{
-\item{items}{A list of Zotero library items as returned by \code{\link[=collection_items]{collection_items()}}.}
+\item{items}{A list of Zotero library items as returned by
+\code{\link[=collection_items]{collection_items()}}.}
 }
 \value{
 A \link[tibble:tbl_df-class]{tibble}.
 }
 \description{
-Converts an items list as returned by \code{\link[=collection_items]{collection_items()}} to a \link[tibble:tbl_df-class]{tibble} (with nested list columns).
+Converts an items list as returned by \link{collection_items(as_tibble = FALSE)}
+to a \link[tibble:tbl_df-class]{tibble} (with nested list columns).
 }
 \details{
-Note that \code{\link[=collection_items]{collection_items()}} by default already calls this function internally (\code{as_tibble = TRUE}).
+Note that \code{\link[=collection_items]{collection_items()}} by default already calls this function
+internally (\code{as_tibble = TRUE}).
 }
 \examples{
 # fetch raw result (2 items)

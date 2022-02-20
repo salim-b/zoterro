@@ -6,7 +6,7 @@
 \alias{zotero_key}
 \alias{zotero_user_id}
 \alias{zotero_group_id}
-\title{Get Zotero username and key}
+\title{Get Zotero user ID and API key}
 \usage{
 zotero_usr()
 
@@ -26,8 +26,8 @@ of class \code{"zotero_user_id"} and \code{"zotero_group_id"}, both inheriting f
 }
 \description{
 \itemize{
-\item \code{zotero_usr()}: return Zotero user ID
-\item \code{zotero_key()}: return Zotero key
+\item \code{zotero_usr()}: Return Zotero user ID
+\item \code{zotero_key()}: Return Zotero key
 }
 
 \itemize{
@@ -44,7 +44,7 @@ found:
 \item Environment variables \code{ZOTERO_USER} and \code{ZOTERO_KEY} respectively.
 }
 
-Best practice is to store both the user ID and the key in read-protected
+Best practice is to store both the user ID and the API key in read-protected
 \verb{~/.Renviron} as environment variables.
 
 A new API key can be created on \href{https://www.zotero.org/settings/keys/new}{this page}. The own user ID can be

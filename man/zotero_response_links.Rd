@@ -7,7 +7,7 @@
 zotero_response_links(r, ...)
 }
 \arguments{
-\item{r}{response
+\item{r}{Response.
 
 Returns named character vector with names from: first, prev, next, last. URL
 named alternate leads to corresponding webpage.}
