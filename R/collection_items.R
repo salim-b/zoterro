@@ -86,9 +86,7 @@ as_item_tibble <- function(items) {
     res <- as_item_tibble_helper(items)
   }
 
-  res %>%
-    ## convert to proper types
-    dplyr::mutate()
+  res
 }
 
 as_item_tibble_helper <- function(item) {
