@@ -10,6 +10,14 @@
 
 Accessing Zotero web API to fetch/put/manipulate bibliographical data.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/mbojan/zoterro}
+  \item Report bugs at \url{https://github.com/mbojan/zoterro/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Michal Bojanowski \email{michal2992@gmail.com} (\href{https://orcid.org/0000-0001-7503-852X}{ORCID})
 

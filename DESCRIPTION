@@ -10,6 +10,8 @@ Authors@R: c(
 Description: Accessing Zotero web API to fetch/put/manipulate
     bibliographical data.
 License: GPL-2
+URL: https://github.com/mbojan/zoterro
+BugReports: https://github.com/mbojan/zoterro/issues
 Imports: 
     dplyr,
     httr,
