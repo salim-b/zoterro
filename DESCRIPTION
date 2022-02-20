@@ -1,18 +1,26 @@
 Package: zoterro
 Title: Zotero Web API Interface
 Version: 0.1-0
-Authors@R: 
-    person(given = "Michal",
-           family = "Bojanowski",
-           role = c("aut", "cre"),
-           email = "michal2992@gmail.com",
-           comment = c(ORCID = "0000-0001-7503-852X"))
-Description: Accessing Zotero web API to fetch/put/manipulate bibliographical data.
-Imports: httr, magrittr, purrr, dplyr, stringi
+Authors@R: c(
+    person("Michal", "Bojanowski", , "michal2992@gmail.com", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-7503-852X")),
+    person("Salim", "Brüggemann", , "salim-b@pm.me", role = c("ctb"),
+           comment = c(ORCID = "0000-0002-5329-5987"))
+  )
+Description: Accessing Zotero web API to fetch/put/manipulate
+    bibliographical data.
 License: GPL-2
+Imports: 
+    dplyr,
+    httr,
+    magrittr,
+    purrr,
+    stringi,
+    tibble
+Suggests: 
+    testthat
+Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.0
-Suggests: 
-    testthat
+RoxygenNote: 7.1.2

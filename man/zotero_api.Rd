@@ -7,19 +7,38 @@
 zotero_api(
   base_url = "https://api.zotero.org",
   query = NULL,
+  fetch_subsequent = TRUE,
   path = NULL,
   user = zotero_usr(),
+  api_key = zotero_key(),
+  verbose = getOption("zoterro.verbose", FALSE),
   ...
 )
 }
 \arguments{
-\item{base_url}{API URL}
+\item{base_url}{Base URL of the \href{https://www.zotero.org/support/dev/web_api/v3/basics#base_url}{Zotero Web API}.}
 
-\item{path, query}{passed to \code{\link[=modify_url]{modify_url()}}}
+\item{query}{A named list of \href{https://www.zotero.org/support/dev/web_api/v3/basics#general_parameters}{Zotero Web API URL parameters},
+passed on to \code{\link[httr:modify_url]{httr::modify_url()}}.
 
-\item{user}{object returned by \code{\link[=zotero_user_id]{zotero_user_id()}} or \code{\link[=zotero_group_id]{zotero_group_id()}}}
+Note that the maximum \code{limit} is \code{100} results. Set
+\code{fetch_subsequent = TRUE} (default) to retrieve all results.}
 
-\item{...}{For \code{\link[=zotero_api]{zotero_api()}} passed to \code{\link[httr:GET]{httr::GET()}}.}
+\item{fetch_subsequent}{Whether or not to also retrieve results beyond
+\code{query$start + query$limit}.}
+
+\item{path}{\href{https://www.zotero.org/support/dev/web_api/v3/basics#resources}{Zotero Web API resource path}
+without the \verb{<userOrGroupPrefix>/}. e.g. \code{items/top}.}
+
+\item{user}{Object returned by \code{\link[=zotero_user_id]{zotero_user_id()}} or \code{\link[=zotero_group_id]{zotero_group_id()}}.}
+
+\item{api_key}{Personal \href{https://www.zotero.org/support/dev/web_api/v3/basics#authentication}{Zotero Web API key}.
+See \code{\link[=zotero_key]{zotero_key()}}. If \code{NULL}, authentication is omitted, resulting in
+limited access to public Zotero libraries only.}
+
+\item{verbose}{Whether or not to print called API URLs to the console.}
+
+\item{...}{Further arguments passed on to \code{\link[httr:GET]{httr::GET()}}.}
 }
 \value{
 List of \code{response} objects (c.f. \code{\link[httr:GET]{httr::GET()}}).
@@ -31,15 +50,17 @@ multiple parts, multiple requests are made to fetch everything.
 \details{
 The \code{user} argument expects Zotero user or group ID. Use \code{\link[=zotero_user_id]{zotero_user_id()}}
 or \code{\link[=zotero_group_id]{zotero_group_id()}} to pass it. By default \code{\link[=zotero_usr]{zotero_usr()}} is called which
-fetches the ID from the option or the environment variable.
+fetches the ID from the \R option \code{zoterro.user} or the environment variable
+\code{ZOTERO_USER}.
 
 The URL of the request will contain the appropriate user/group ID prefix
 which will be combined with \code{path} or \code{query} when supplied.
 
-The function is responsive to the following options:
+The function is by default responsive to the following \R options:
 \itemize{
-\item \code{zoterro.verbose} - (default \code{FALSE}) give more feedback when running
-\item \code{zoterro.sleep} - (default 1) sleep time between requests, see \code{\link[=Sys.sleep]{Sys.sleep()}}
+\item \strong{\code{zoterro.user}} (default \code{\link[=zotero_usr]{zotero_usr()}}): Zotero user ID.
+\item \strong{\code{zoterro.key}} (default \code{\link[=zotero_key]{zotero_key()}}): Personal \href{https://www.zotero.org/support/dev/web_api/v3/basics#authentication}{Zotero Web API key}.
+\item \strong{\code{zoterro.verbose}} (default \code{FALSE}): Give more feedback when running.
 }
 }
 \examples{
@@ -48,6 +69,6 @@ The function is responsive to the following options:
 zotero_api(path = "groups")
 
 # Fetch top-level collections for the group with ID=12345
-zotero_api(path="collections/top", user=zotero_group_id(12345))
+zotero_api(path = "collections/top", user = zotero_group_id(12345))
 }
 }

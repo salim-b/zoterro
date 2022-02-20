@@ -7,17 +7,20 @@
 collections(...)
 }
 \arguments{
-\item{...}{passed to \code{\link[=zotero_api]{zotero_api()}}}
+\item{...}{Further arguments passed on to \code{\link[=zotero_api]{zotero_api()}}}
 }
 \value{
-Data frame with columns:
+A \link[tibble:tbl_df-class]{tibble} with columns:
 \itemize{
-\item \code{key} - collection key
-\item \code{name} - collection name
-\item \code{parent} - key of the parent collection or \code{NA}
+\item \code{key}: Collection key.
+\item \code{name}: Collection name.
+\item \code{parent_key}: Key of the parent collection (\code{NA} if no parent collection exists).
 }
 }
 \description{
 Fetch all collections of a Zotero user with their keys and keys of parent
 collections (if any).
+}
+\examples{
+collections(user = zotero_group_id(id = 197065))
 }

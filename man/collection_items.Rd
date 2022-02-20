@@ -5,19 +5,36 @@
 \alias{save_collection}
 \title{Fetch all items in a collection}
 \usage{
-collection_items(key, ...)
+collection_items(key, as_tibble = TRUE, ...)
 
 save_collection(key, path, ...)
 }
 \arguments{
-\item{key}{collection key, see \code{\link[=collections]{collections()}}}
+\item{key}{\href{https://www.zotero.org/support/dev/web_api/v3/basics#collections}{Collection key},
+see \code{\link[=collections]{collections()}}.}
 
-\item{...}{other arguments passed to \code{\link[=zotero_api]{zotero_api()}}}
+\item{as_tibble}{Whether or not to convert the resulting list to a tibble
+(with nested list columns). If \code{FALSE}, a bare list is returned instead.}
+
+\item{...}{Other arguments passed to \code{\link[=zotero_api]{zotero_api()}}}
 
 \item{path}{path to file}
+}
+\value{
+A \link[tibble:tbl_df-class]{tibble} if \code{as_tibble = TRUE}, otherwise a list.
 }
 \description{
 \itemize{
 \item \code{save_collection()} - Write BibTeX file \code{path} with all items in a collection
 }
 }
+\examples{
+# items from public collections can be fetched without an API key
+collection_items(key = "MSNU4A4F", user = zotero_group_id(id = 197065))
+}
+\seealso{
+Other Zotero items functions:
+\code{\link{add_archive_url}()},
+\code{\link{as_item_tibble}()}
+}
+\concept{items}
