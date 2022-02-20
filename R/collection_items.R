@@ -4,7 +4,9 @@
 #'   key](https://www.zotero.org/support/dev/web_api/v3/basics#collections),
 #'   see [collections()].
 #' @param as_tibble Whether or not to convert the resulting list to a tibble
-#'   (with nested list columns). If `FALSE`, a bare list is returned instead.
+#'   (with nested list columns). If `FALSE`, a bare list is returned instead
+#'   which also retains all additional API metadata fields besides the actual
+#'   items data. See [as_item_tibble()] for details.
 #' @param ... Other arguments passed to [zotero_api()]
 #'
 #' @export
@@ -30,7 +32,8 @@ collection_items <- function(key,
 #' @rdname collection_items
 #'
 #' @description
-#' - `save_collection()`: Write BibTeX file `path` with all items in a collection.
+#' - `save_collection()`: Write BibTeX file `path` with all items in a
+#'   collection.
 #'
 #' @param path Path to file.
 #'
@@ -44,8 +47,10 @@ save_collection <- function(key, path, ...) {
 
 #' Convert items list to a tibble
 #'
-#' Converts an items list as returned by [collection_items(as_tibble = FALSE)]
-#' to a [tibble][tibble::tbl_df] (with nested list columns).
+#' Converts an items list as returned by
+#' [`collection_items(as_tibble = FALSE)`][collection_items] to a
+#' [tibble][tibble::tbl_df] (with nested list columns), dropping API metadata
+#' fields that are not part of the items data.
 #'
 #' Note that [collection_items()] by default already calls this function
 #' internally (`as_tibble = TRUE`).

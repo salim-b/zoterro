@@ -14,8 +14,10 @@ as_item_tibble(items)
 A \link[tibble:tbl_df-class]{tibble}.
 }
 \description{
-Converts an items list as returned by \link{collection_items(as_tibble = FALSE)}
-to a \link[tibble:tbl_df-class]{tibble} (with nested list columns).
+Converts an items list as returned by
+\code{\link[=collection_items]{collection_items(as_tibble = FALSE)}} to a
+\link[tibble:tbl_df-class]{tibble} (with nested list columns), dropping API metadata
+fields that are not part of the items data.
 }
 \details{
 Note that \code{\link[=collection_items]{collection_items()}} by default already calls this function

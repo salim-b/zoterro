@@ -14,7 +14,9 @@ save_collection(key, path, ...)
 see \code{\link[=collections]{collections()}}.}
 
 \item{as_tibble}{Whether or not to convert the resulting list to a tibble
-(with nested list columns). If \code{FALSE}, a bare list is returned instead.}
+(with nested list columns). If \code{FALSE}, a bare list is returned instead
+which also retains all additional API metadata fields besides the actual
+items data. See \code{\link[=as_item_tibble]{as_item_tibble()}} for details.}
 
 \item{...}{Other arguments passed to \code{\link[=zotero_api]{zotero_api()}}}
 
@@ -25,7 +27,8 @@ A \link[tibble:tbl_df-class]{tibble} if \code{as_tibble = TRUE}, otherwise a lis
 }
 \description{
 \itemize{
-\item \code{save_collection()}: Write BibTeX file \code{path} with all items in a collection.
+\item \code{save_collection()}: Write BibTeX file \code{path} with all items in a
+collection.
 }
 }
 \examples{
