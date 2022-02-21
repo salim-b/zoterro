@@ -77,11 +77,15 @@ save_collection <- function(key, path, ...) {
 #' as_item_tibble(r)
 as_item_tibble <- function(items) {
 
-  # multiple items
-  if (is.null(names(items))) {
+  # dataframe/tibble already
+  if (is.data.frame(items)) {
+    res <- items
+
+    # multiple items list
+  } else if (is.null(names(items))) {
     res <- purrr::map_dfr(items, as_item_tibble_helper)
 
-    # single item
+    # single item list
   } else {
     res <- as_item_tibble_helper(items)
   }
