@@ -5,6 +5,8 @@ test_that("items list to tibble conversion is idempotent", {
     as_tibble = FALSE
   )
 
-  expect_equal(r %>% as_item_tibble(),
-               r %>% as_item_tibble() %>% as_item_tibble())
+  expect_equal(
+    r %>% as_item_tibble(),
+    r %>% as_item_tibble() %>% as_item_tibble()
+  )
 })

@@ -138,8 +138,10 @@ add_archive_url <- function(items) {
   if (!is.data.frame(items)) items <- as_item_tibble(items)
 
   if (!all(c("parentItem", "itemType", "title") %in% colnames(items))) {
-    stop(paste0("`items` must contain all of the fields ",
-                "`parentItem`, `itemType` and `title`."))
+    stop(paste0(
+      "`items` must contain all of the fields ",
+      "`parentItem`, `itemType` and `title`.")
+    )
   }
 
   # "Robust Link" attachments are children of top-level items

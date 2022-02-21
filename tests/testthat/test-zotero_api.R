@@ -4,8 +4,10 @@ private_group_id <- zotero_group_id(2124500)
 
 skip_if_no_defaults <- function() {
   skip_if(try(zotero_usr(), silent = TRUE) %>% inherits(what = "try-error"))
-  skip_if_not(is_api_key_valid(api_key = zotero_key(),
-                               url = "https://api.zotero.org"))
+  skip_if_not(is_api_key_valid(
+    api_key = zotero_key(),
+    url = "https://api.zotero.org")
+  )
 }
 
 # Simple requests ----
@@ -13,9 +15,11 @@ skip_if_no_defaults <- function() {
 test_that("Request using default user ID and API key", {
   skip_if_no_defaults()
   expect_s3_class(
-    zotero_get(url = paste0("https://api.zotero.org/users/", zotero_usr(), "/collections/top"),
-               user = zotero_usr(),
-               api_key = zotero_key()),
+    zotero_get(
+      url = paste0("https://api.zotero.org/users/", zotero_usr(), "/collections/top"),
+      user = zotero_usr(),
+      api_key = zotero_key()
+    ),
     "response"
   )
 })
