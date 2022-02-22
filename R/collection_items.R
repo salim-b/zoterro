@@ -40,7 +40,11 @@ collection_items <- function(key,
 #' @export
 save_collection <- function(key, path, ...) {
   cat(
-    rawToChar(collection_items(key, query = list(format = "bibtex"), ...)),
+    rawToChar(collection_items(
+      key,
+      as_tibble = FALSE,
+      query = list(format = "bibtex"),
+      ...)),
     file = path
   )
 }
