@@ -2,12 +2,9 @@
 % Please edit documentation in R/collection_items.R
 \name{collection_items}
 \alias{collection_items}
-\alias{save_collection}
 \title{Fetch all items in a collection}
 \usage{
 collection_items(key, as_tibble = TRUE, ...)
-
-save_collection(key, path, ...)
 }
 \arguments{
 \item{key}{\href{https://www.zotero.org/support/dev/web_api/v3/basics#collections}{Collection key},
@@ -19,17 +16,12 @@ which also retains all additional API metadata fields besides the actual
 items data. See \code{\link[=as_item_tibble]{as_item_tibble()}} for details.}
 
 \item{...}{Other arguments passed to \code{\link[=zotero_api]{zotero_api()}}}
-
-\item{path}{Path to file.}
 }
 \value{
 A \link[tibble:tbl_df-class]{tibble} if \code{as_tibble = TRUE}, otherwise a list.
 }
 \description{
-\itemize{
-\item \code{save_collection()}: Write BibTeX file \code{path} with all items in a
-collection.
-}
+Fetch all items in a collection
 }
 \examples{
 # items from public collections can be fetched without an API key

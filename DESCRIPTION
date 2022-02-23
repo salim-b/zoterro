@@ -4,7 +4,7 @@ Version: 0.1.9000
 Authors@R: c(
     person("Michal", "Bojanowski", , "michal2992@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7503-852X")),
-    person("Salim", "Brüggemann", , "salim-b@pm.me", role = c("ctb"),
+    person("Salim", "Brüggemann", , "salim-b@pm.me", role = "ctb",
            comment = c(ORCID = "0000-0002-5329-5987"))
   )
 Description: Accessing Zotero web API to fetch/put/manipulate
@@ -12,14 +12,14 @@ Description: Accessing Zotero web API to fetch/put/manipulate
 License: GPL-2
 URL: https://github.com/mbojan/zoterro
 BugReports: https://github.com/mbojan/zoterro/issues
-Imports: 
+Imports:
     dplyr,
     httr,
     magrittr,
     purrr,
     stringi,
     tibble
-Suggests: 
+Suggests:
     testthat
 Config/testthat/edition: 3
 Encoding: UTF-8
