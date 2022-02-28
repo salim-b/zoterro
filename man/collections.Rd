@@ -18,8 +18,8 @@ A \link[tibble:tbl_df-class]{tibble} with columns:
 }
 }
 \description{
-Fetch all collections of a Zotero user with their keys and keys of parent
-collections (if any).
+Fetch all collections of a Zotero user or group library with their keys and
+keys of parent collections (if any).
 }
 \examples{
 collections(user = zotero_group_id(id = 197065))

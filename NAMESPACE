@@ -2,9 +2,9 @@
 
 export(add_archive_url)
 export(as_item_tibble)
-export(collection_items)
 export(collections)
-export(save_collection)
+export(items)
+export(write_bib)
 export(zotero_api)
 export(zotero_group_id)
 export(zotero_key)

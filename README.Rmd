@@ -2,6 +2,9 @@
 output: github_document
 editor_options: 
   chunk_output_type: console
+  markdown:
+    wrap: none
+    canonical: true
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -11,6 +14,7 @@ library(zoterro)
 
 knitr::opts_chunk$set(
   cache = TRUE,
+  cache.path = ".cache/README/",
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
@@ -40,90 +44,79 @@ sticker(
 )
 ```
 
-
-
-
-
-# zoterro  <img src="man/figures/logo.png" align="right" width="20%"/>
+# zoterro <img src="man/figures/logo.png" align="right" width="20%"/>
 
 <!-- badges: start -->
-[![R build status](https://github.com/mbojan/zoterro/workflows/R-CMD-check/badge.svg)](https://github.com/mbojan/zoterro/actions)
-[![CRAN status](https://www.r-pkg.org/badges/version/zoterro)](https://CRAN.R-project.org/package=zoterro)
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
+[![R build status](https://github.com/mbojan/zoterro/workflows/R-CMD-check/badge.svg)](https://github.com/mbojan/zoterro/actions) [![CRAN status](https://www.r-pkg.org/badges/version/zoterro)](https://CRAN.R-project.org/package=zoterro) [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing) [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
 <!-- badges: end -->
 
+[Zotero](https://www.zotero.org/) is a free tool for collecting, organizing, and citing research developed by the [Corporation for Digital Scholarship](https://digitalscholar.org/). Zoterro (with double "r") is a simple R client to the [Zotero web API (ver. 3)](https://www.zotero.org/support/dev/web_api/v3/start) which can be used to access the data of public groups, your personal account, or groups you are a member of.
 
-
-
-
-[Zotero](https://www.zotero.org/) is a free tool for collecting, organizing, and citing research developed by [Corporation for Digital Scholarship](https://digitalscholar.org/). Zoterro (with double "r") is a simple R client to Zotero web API (ver. 3) with which you can access the data of public groups, associated with your account, or groups you are a member of.
-
-The client implements convenience functions for fetching data using probably the most frequently needed end points. API endpoints without a convinient wrapper (yet) can still be accessed using the low-level interface provided by `zotero_api()`. See [Zotero API documentation](https://www.zotero.org/support/dev/web_api/v3/start) for what endpoints are available.
-
+The client implements convenience functions for fetching data from the most frequently needed API endpoints. Endpoints for which no convenience wrapper is offered (yet) can be accessed using the low-level interface provided by `zotero_api()`. See [Zotero API documentation](https://www.zotero.org/support/dev/web_api/v3/basics) for what endpoints are available.
 
 ## Installation
 
-Install development version from [GitHub](https://github.com/mbojan/zoterro) with:
+Install the development version from [GitHub](https://github.com/mbojan/zoterro) via:
 
 ```{r install, eval=FALSE}
 # install.packages("remotes")
 remotes::install_github("mbojan/zoterro")
 ```
 
-
-
-
-
 ## Examples
 
-- Fetch a complete collection hierarchy as a data frame. By default it will fetch for the default user, but here we fetch the collections associated with a public Zotero group "Computational Social Science" that has an ID `269768`:
+-   Fetch a complete collection hierarchy as a data frame. The function defaults to the configured user ID determined by `zotero_usr()`, but here we fetch the collections associated with a public Zotero group ["Computational Social Science"](https://www.zotero.org/groups/269768/computational_social_science) that has the ID `269768`:
+
     ```{r ex-collections}
     collections(user = zotero_group_id(269768))
     ```
-  Collections are identifed with unique `key`s. If any of the collections would be nested within some other collection, the key of the parent collection would appear in the column `parent`.
 
-- Fetch all items from a collection. By default the format returned is a JSON parsed to a list:
+    Collections are identifed with unique `key`s. If any of the collections would be nested within some other collection, the key of the parent collection would appear in the column `parent`.
+
+-   Fetch all items from a collection. By default the data is returned as a tibble:
+
     ```{r ex-collection-items-json}
-    items <- collection_items(key="PJHH85S9", user = zotero_group_id(269768))
-    str(items[[1]])
+    items(collection_key = "PJHH85S9", user = zotero_group_id(269768))
     ```
-  The output format can be changed to e.g. BibTeX:
+
+    The output format can be changed to e.g. BibTeX:
+
     ```{r ex-collection-items-bibtex}
-        items_bibtex <- collection_items(
-          key="PJHH85S9", 
-          user = zotero_group_id(269768), 
-          query = list(format="bibtex")
+        items_bibtex <- items(
+          collection_key = "PJHH85S9",
+          as_tibble = FALSE,
+          user = zotero_group_id(269768),
+          query = list(format = "bibtex")
         )
         # This will print all the entries...
         # cat(rawToChar(items_bibtex))
         
         # ... but to save space we show just the first three:
         entries <- head(strsplit(
-          rawToChar(items_bibtex), 
+          rawToChar(items_bibtex),
           "\n\n"
         )[[1]], 3 )
-        cat(entries, sep="\n\n")
+        cat(entries, sep = "\n\n")
     ```
-  
 
-- Fetch all items from a collection and save to BibTeX file `references.bib`. Basically a conveniece wrapper for the example above.
+-   Fetch all items from a collection and save to BibTeX file `references.bib`. Basically a conveniece wrapper for the example above.
+
     ```{r ex-save-collection, eval=FALSE}
-    save_collection(
-      key="PJHH85S9", 
+    write_bib(
+      collection_key = "PJHH85S9",
       path = "references.bib",
       user = zotero_group_id(269768)
     )
     ```
 
-- `zotero_api()` is a low-level function. It will make multiple requests if the results do not fit a single response. The following will fetch all items in the "My Publications" collection of the default user:
+-   `zotero_api()` is a low-level function. It will make multiple requests if the results do not fit in a single response. The following will fetch all items in the "My Publications" collection of the default user:
+
     ```{r ex-zotero-api, eval=FALSE}
-    zotero_api(path="publications/items")
+    zotero_api(path = "publications/items")
     ```
 
-
-
-
 ## Code of Conduct
-  
+
 Please note that the zoterro project is released with a [Contributor Code of Conduct](https://contributor-covenant.org/version/2/0/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.

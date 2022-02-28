@@ -1,6 +1,6 @@
 test_that("items list to tibble conversion is idempotent", {
-  r <- collection_items(
-    key = "MSNU4A4F",
+  r <- items(
+    collection_key = "MSNU4A4F",
     user = zotero_group_id(id = 197065),
     as_tibble = FALSE
   )

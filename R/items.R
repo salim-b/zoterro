@@ -1,8 +1,14 @@
-#' Fetch all items in a collection
+#' Fetch Zotero library items
 #'
-#' @param key [Collection
+#' Retrieves items belonging to a Zotero user or group library, optionally
+#' limited to a specific collection.
+#'
+#' @param collection_key [Collection
 #'   key](https://www.zotero.org/support/dev/web_api/v3/basics#collections),
 #'   see [collections()].
+#' @param incl_children Whether or not to include child items from
+#'   sub-collections beneath the `collection_key`'s or the library's (if
+#'   `collection_key = NULL`) top level.
 #' @param as_tibble Whether or not to convert the resulting list to a tibble
 #'   (with nested list columns). If `FALSE`, a bare list is returned instead
 #'   which also retains all additional API metadata fields besides the actual
@@ -13,14 +19,23 @@
 #' @return A [tibble][tibble::tbl_df] if `as_tibble = TRUE`, otherwise a list.
 #' @family items
 #' @examples
-#' # items from public collections can be fetched without an API key
-#' collection_items(key = "MSNU4A4F", user = zotero_group_id(id = 197065))
+#' # items from public libraries can be fetched without an API key
+#' items(collection_key = "MSNU4A4F", user = zotero_group_id(id = 197065))
+#'
+#' # when no collection key is supplied, the whole library is fetched
+#' items(user = zotero_group_id(id = 197065))
+#'
+#' # optionally, the retrieval ca be limited to top-level items only
+#' items(incl_children = FALSE, user = zotero_group_id(id = 197065))
 
-collection_items <- function(key,
-                             as_tibble = TRUE,
-                             ...) {
+items <- function(collection_key = NULL,
+                  incl_children = TRUE,
+                  as_tibble = TRUE,
+                  ...) {
   res <- zotero_api(
-    path = paste("collections", key, "items", sep = "/"),
+    path = paste0(
+      paste0("collections/", collection_key, "/")[!is.null(collection_key)], "items", "/top"[!incl_children]
+    ),
     ...
   )
 
@@ -29,11 +44,13 @@ collection_items <- function(key,
   res
 }
 
-#' Export all items in a collection to file
+#' Export Zotero library items to bibliography file
 #'
-#' Writes a file of the chosen `format` to `path` with all items in a collection.
+#' Writes a file of the chosen bibliography `format` to `path` with items
+#' belonging to a Zotero user or group library, optionally limited to a
+#' specific collection.
 #'
-#' @inheritParams collection_items
+#' @inheritParams items
 #' @param path Path to file.
 #' @param format Bibliographic data format used for export. One of:
 #'   - `"bibtex"`,
@@ -50,9 +67,13 @@ collection_items <- function(key,
 #'   For details, see the [relevant Zotero
 #'   documentation](https://www.zotero.org/support/dev/web_api/v3/basics#export_formats).
 #'
+#' @family items
 #' @export
-save_collection <- function(key, path, format = "bibtex", ...) {
-
+write_bib <- function(collection_key = NULL,
+                      incl_children = TRUE,
+                      path,
+                      format = "bibtex",
+                      ...) {
   format <- match.arg(
     arg = format,
     choices = c("bibtex",
@@ -69,8 +90,9 @@ save_collection <- function(key, path, format = "bibtex", ...) {
                 # "tei",       # returns internal server error (500)
                 "wikipedia")
   )
-  res <- collection_items(
-    key = key,
+  res <- items(
+    collection_key = collection_key,
+    incl_children = incl_children,
     as_tibble = FALSE,
     query = list(format = format),
     ...
@@ -82,18 +104,18 @@ save_collection <- function(key, path, format = "bibtex", ...) {
   cat(res, file = path)
 }
 
-#' Convert items list to a tibble
+#' Convert Zotero library items list to a tibble
 #'
 #' Converts an items list as returned by
-#' [`collection_items(as_tibble = FALSE)`][collection_items] to a
-#' [tibble][tibble::tbl_df] (with nested list columns), dropping API metadata
-#' fields that are not part of the items data.
+#' [`items(as_tibble = FALSE)`][items] to a [tibble][tibble::tbl_df] (with
+#' nested list columns), dropping API metadata fields that are not part of the
+#' items data.
 #'
-#' Note that [collection_items()] by default already calls this function
+#' Note that [items()] by default already calls this function
 #' internally (`as_tibble = TRUE`).
 #'
 #' @param items A list of Zotero library items as returned by
-#'   [collection_items()].
+#'   [items()].
 #'
 #' @return A [tibble][tibble::tbl_df].
 #' @family items
@@ -140,7 +162,6 @@ as_item_tibble_helper <- function(item) {
     tibble::as_tibble_row()
 }
 
-
 #' Add archive URLs from "Robust Link" attachments
 #'
 #' Adds a top-level column `archiveUrl` with archive links extracted from item
@@ -151,8 +172,8 @@ as_item_tibble_helper <- function(item) {
 #' link](https://www.zotero.org/groups/4603023/zoterro_testing/items/KC6WFG78/attachment/EE7ZQ6PD/library).
 #'
 #' @param items A list or data frame of Zotero library items as returned by
-#'   [collection_items()]. Must include all of the fields/columns `parentItem`,
-#'   `itemType` and `title`.
+#'   [items()]. Must include all of the fields/columns `parentItem`, `itemType`
+#'   and `title`.
 #'
 #' @inherit as_item_tibble return
 #' @family items
@@ -162,8 +183,7 @@ as_item_tibble_helper <- function(item) {
 #' library(magrittr)
 #'
 #' # fetch some demo entry
-#' collection_items(key = "AZBJE3R8",
-#'                  user = zotero_group_id(4603023)) %>%
+#' items(key = "AZBJE3R8", user = zotero_group_id(4603023)) %>%
 #'   # add archive link
 #'   add_archive_url() %>%
 #'   # drop "Robust Link" attachment
@@ -172,7 +192,7 @@ as_item_tibble_helper <- function(item) {
 #'   dplyr::select(key, url, archiveUrl)
 add_archive_url <- function(items) {
 
-  if (!is.data.frame(items)) items <- as_item_tibble(items)
+  items <- as_item_tibble(items)
 
   if (!all(c("parentItem", "itemType", "title") %in% colnames(items))) {
     stop(paste0(

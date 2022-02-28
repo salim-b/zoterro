@@ -1,6 +1,7 @@
 ^zoterro\.Rproj$
 ^\.Rproj\.user$
 ^README\.Rmd$
+^\.cache$
 ^\.github$
 ^img-raw$
 ^CODE_OF_CONDUCT\.md$

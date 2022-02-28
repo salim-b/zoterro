@@ -14,26 +14,28 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 [![Project Status: WIP – Initial development is in progress, but there
 has not yet been a stable, usable release suitable for the
 public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+
 <!-- badges: end -->
 
 [Zotero](https://www.zotero.org/) is a free tool for collecting,
-organizing, and citing research developed by [Corporation for Digital
-Scholarship](https://digitalscholar.org/). Zoterro (with double “r”) is
-a simple R client to Zotero web API (ver. 3) with which you can access
-the data of public groups, associated with your account, or groups you
-are a member of.
+organizing, and citing research developed by the [Corporation for
+Digital Scholarship](https://digitalscholar.org/). Zoterro (with double
+“r”) is a simple R client to the [Zotero web API (ver.
+3)](https://www.zotero.org/support/dev/web_api/v3/start) which can be
+used to access the data of public groups, your personal account, or
+groups you are a member of.
 
-The client implements convenience functions for fetching data using
-probably the most frequently needed end points. API endpoints without a
-convinient wrapper (yet) can still be accessed using the low-level
-interface provided by `zotero_api()`. See [Zotero API
-documentation](https://www.zotero.org/support/dev/web_api/v3/start) for
+The client implements convenience functions for fetching data from the
+most frequently needed API endpoints. Endpoints for which no convenience
+wrapper is offered (yet) can be accessed using the low-level interface
+provided by `zotero_api()`. See [Zotero API
+documentation](https://www.zotero.org/support/dev/web_api/v3/basics) for
 what endpoints are available.
 
 ## Installation
 
-Install development version from
-[GitHub](https://github.com/mbojan/zoterro) with:
+Install the development version from
+[GitHub](https://github.com/mbojan/zoterro) via:
 
 ``` r
 # install.packages("remotes")
@@ -42,114 +44,88 @@ remotes::install_github("mbojan/zoterro")
 
 ## Examples
 
-  - Fetch a complete collection hierarchy as a data frame. By default it
-    will fetch for the default user, but here we fetch the collections
-    associated with a public Zotero group “Computational Social Science”
-    that has an ID `269768`:
-    
+-   Fetch a complete collection hierarchy as a data frame. The function
+    defaults to the configured user ID determined by `zotero_usr()`, but
+    here we fetch the collections associated with a public Zotero group
+    [“Computational Social
+    Science”](https://www.zotero.org/groups/269768/computational_social_science)
+    that has the ID `269768`:
+
     ``` r
     collections(user = zotero_group_id(269768))
-    #>         key                          name parent
-    #> 1  37L2NKQS                 Audit Culture   <NA>
-    #> 2  FV8VSU96                  Supply Chain   <NA>
-    #> 3  7YP6NY6Y                   Informatics   <NA>
-    #> 4  JSUQ2CAP  Online political information   <NA>
-    #> 5  TQ2T8I4S   Anticipatory Infrastructure   <NA>
-    #> 6  VZKMHAKU       Prosopography & History   <NA>
-    #> 7  95U78BNI               Behavior change   <NA>
-    #> 8  UBT2C48F              Online community   <NA>
-    #> 9  FWIPZMZB        Organizational ecology   <NA>
-    #> 10 PJHH85S9                     Genealogy   <NA>
-    #> 11 C6FFPZNS      Bots & Field Experiments   <NA>
-    #> 12 HKKTBDTF              Social Computing   <NA>
-    #> 13 I8F6BFTC                        Ethics   <NA>
-    #> 14 F2HZII59 Moral Panics and Risk Society   <NA>
-    #> 15 CRNZIRNE            Policy experiments   <NA>
-    #> 16 IWPTPITN                   Foundations   <NA>
-    #> 17 FZ74NFEN       Social Network Analysis   <NA>
-    #> 18 EH5ZX8SB                     Critiques   <NA>
-    #> 19 FC6AK8VG        Abduction/Retroduction   <NA>
-    #> 20 JAXD7H8S                 Paradigm wars   <NA>
+    #> # A tibble: 20 × 3
+    #>    key      name                          parent_key
+    #>    <chr>    <chr>                         <chr>     
+    #>  1 37L2NKQS Audit Culture                 <NA>      
+    #>  2 FV8VSU96 Supply Chain                  <NA>      
+    #>  3 7YP6NY6Y Informatics                   <NA>      
+    #>  4 JSUQ2CAP Online political information  <NA>      
+    #>  5 TQ2T8I4S Anticipatory Infrastructure   <NA>      
+    #>  6 VZKMHAKU Prosopography & History       <NA>      
+    #>  7 95U78BNI Behavior change               <NA>      
+    #>  8 UBT2C48F Online community              <NA>      
+    #>  9 FWIPZMZB Organizational ecology        <NA>      
+    #> 10 PJHH85S9 Genealogy                     <NA>      
+    #> 11 C6FFPZNS Bots & Field Experiments      <NA>      
+    #> 12 HKKTBDTF Social Computing              <NA>      
+    #> 13 I8F6BFTC Ethics                        <NA>      
+    #> 14 F2HZII59 Moral Panics and Risk Society <NA>      
+    #> 15 CRNZIRNE Policy experiments            <NA>      
+    #> 16 IWPTPITN Foundations                   <NA>      
+    #> 17 FZ74NFEN Social Network Analysis       <NA>      
+    #> 18 EH5ZX8SB Critiques                     <NA>      
+    #> 19 FC6AK8VG Abduction/Retroduction        <NA>      
+    #> 20 JAXD7H8S Paradigm wars                 <NA>
     ```
-    
+
     Collections are identifed with unique `key`s. If any of the
     collections would be nested within some other collection, the key of
     the parent collection would appear in the column `parent`.
 
-  - Fetch all items from a collection. By default the format returned is
-    a JSON parsed to a list:
-    
+-   Fetch all items from a collection. By default the data is returned
+    as a tibble:
+
     ``` r
-    items <- collection_items(key="PJHH85S9", user = zotero_group_id(269768))
-    str(items[[1]])
-    #> List of 6
-    #>  $ key    : chr "4DMJB285"
-    #>  $ version: int 2469
-    #>  $ library:List of 4
-    #>   ..$ type : chr "group"
-    #>   ..$ id   : int 269768
-    #>   ..$ name : chr "Computational Social Science"
-    #>   ..$ links:List of 1
-    #>   .. ..$ alternate:List of 2
-    #>   .. .. ..$ href: chr "https://www.zotero.org/groups/computational_social_science"
-    #>   .. .. ..$ type: chr "text/html"
-    #>  $ links  :List of 3
-    #>   ..$ self     :List of 2
-    #>   .. ..$ href: chr "https://api.zotero.org/groups/269768/items/4DMJB285"
-    #>   .. ..$ type: chr "application/json"
-    #>   ..$ alternate:List of 2
-    #>   .. ..$ href: chr "https://www.zotero.org/groups/computational_social_science/items/4DMJB285"
-    #>   .. ..$ type: chr "text/html"
-    #>   ..$ up       :List of 2
-    #>   .. ..$ href: chr "https://api.zotero.org/groups/269768/items/ZAIHXBUJ"
-    #>   .. ..$ type: chr "application/json"
-    #>  $ meta   :List of 1
-    #>   ..$ createdByUser:List of 4
-    #>   .. ..$ id      : int 1284030
-    #>   .. ..$ username: chr "brianckeegan"
-    #>   .. ..$ name    : chr "Brian Keegan"
-    #>   .. ..$ links   :List of 1
-    #>   .. .. ..$ alternate:List of 2
-    #>   .. .. .. ..$ href: chr "https://www.zotero.org/brianckeegan"
-    #>   .. .. .. ..$ type: chr "text/html"
-    #>  $ data   :List of 18
-    #>   ..$ key         : chr "4DMJB285"
-    #>   ..$ version     : int 2469
-    #>   ..$ parentItem  : chr "ZAIHXBUJ"
-    #>   ..$ itemType    : chr "attachment"
-    #>   ..$ linkMode    : chr "imported_url"
-    #>   ..$ title       : chr "Snapshot"
-    #>   ..$ accessDate  : chr "2017-10-18T22:34:48Z"
-    #>   ..$ url         : chr "http://onlinelibrary.wiley.com.colorado.idm.oclc.org/doi/10.1111/j.1083-6101.2005.tb00273.x/abstract"
-    #>   ..$ note        : chr ""
-    #>   ..$ contentType : chr "text/html"
-    #>   ..$ charset     : chr "utf-8"
-    #>   ..$ filename    : chr "abstract.html"
-    #>   ..$ md5         : chr "dcfa02c0ad9fd84ac17e1d7560b987b0"
-    #>   ..$ mtime       : num 1.51e+12
-    #>   ..$ tags        : list()
-    #>   ..$ relations   : Named list()
-    #>   ..$ dateAdded   : chr "2017-10-18T22:34:48Z"
-    #>   ..$ dateModified: chr "2019-12-16T17:32:29Z"
+    items(collection_key = "PJHH85S9", user = zotero_group_id(269768))
+    #> # A tibble: 52 × 40
+    #>    key      version parentItem itemType   linkMode title accessDate url   note  contentType charset filename
+    #>    <chr>      <int> <chr>      <chr>      <chr>    <chr> <chr>      <chr> <chr> <chr>       <chr>   <chr>   
+    #>  1 4DMJB285    2469 ZAIHXBUJ   attachment importe… Snap… "2017-10-… "htt… ""    text/html   "utf-8" abstrac…
+    #>  2 ZAIHXBUJ    2465 <NA>       journalAr… <NA>     Usin… ""         "htt…  <NA> <NA>         <NA>   <NA>    
+    #>  3 II488T8Q     812 ZAIHXBUJ   attachment importe… Snap… "2017-11-… "htt… ""    text/html   "utf-8" login.h…
+    #>  4 93T74CKJ     788 QT3DFJP3   attachment importe… choi… ""         ""    ""    applicatio… ""      choi200…
+    #>  5 X24M4ADA     788 QT3DFJP3   attachment importe… Snap… "2017-10-… "htt… ""    text/html   "utf-8" 636.html
+    #>  6 T2GB9HBV     787 QT3DFJP3   attachment linked_… PubM… "2017-10-… "htt… ""    text/html   ""      <NA>    
+    #>  7 QT3DFJP3     787 <NA>       journalAr… <NA>     The … "2017-10-… "htt…  <NA> <NA>         <NA>   <NA>    
+    #>  8 MWJTRJN2     786 ZW56BMF9   attachment importe… natu… ""         ""    ""    applicatio… ""      nature0…
+    #>  9 WSF3JX8A     786 ZW56BMF9   attachment importe… Snap… "2017-10-… "htt… ""    text/html   "utf-8" login.h…
+    #> 10 XBA75WN3     784 EA5JE6JX   attachment importe… Snap… "2017-10-… "htt… ""    text/html   "utf-8" abstrac…
+    #> # … with 42 more rows, and 28 more variables: md5 <chr>, mtime <dbl>, dateAdded <chr>, dateModified <chr>,
+    #> #   creators <list>, abstractNote <chr>, publicationTitle <chr>, volume <chr>, issue <chr>, pages <chr>,
+    #> #   date <chr>, series <chr>, seriesTitle <chr>, seriesText <chr>, journalAbbreviation <chr>,
+    #> #   language <chr>, DOI <chr>, ISSN <chr>, shortTitle <chr>, archive <chr>, archiveLocation <chr>,
+    #> #   libraryCatalog <chr>, callNumber <chr>, rights <chr>, extra <chr>, collections <list>,
+    #> #   relations <named list>, tags <list>
     ```
-    
+
     The output format can be changed to e.g. BibTeX:
-    
+
     ``` r
-        items_bibtex <- collection_items(
-          key="PJHH85S9", 
-          user = zotero_group_id(269768), 
-          query = list(format="bibtex")
+        items_bibtex <- items(
+          collection_key = "PJHH85S9",
+          as_tibble = FALSE,
+          user = zotero_group_id(269768),
+          query = list(format = "bibtex")
         )
         # This will print all the entries...
         # cat(rawToChar(items_bibtex))
-    
+
         # ... but to save space we show just the first three:
         entries <- head(strsplit(
-          rawToChar(items_bibtex), 
+          rawToChar(items_bibtex),
           "\n\n"
         )[[1]], 3 )
-        cat(entries, sep="\n\n")
+        cat(entries, sep = "\n\n")
     #> 
     #> @article{ling_using_2005,
     #>  title = {Using {Social} {Psychology} to {Motivate} {Contributions} to {Online} {Communities}},
@@ -165,7 +141,7 @@ remotes::install_github("mbojan/zoterro")
     #>  month = jul,
     #>  year = {2005},
     #>  note = {Citation Key Alias: LingUsingSocialPsychology2005a},
-    #>  pages = {00--00}
+    #>  pages = {00--00},
     #> }
     #> 
     #> @article{choi_coevolution_2007,
@@ -186,7 +162,7 @@ remotes::install_github("mbojan/zoterro")
     #>  month = oct,
     #>  year = {2007},
     #>  pmid = {17962562},
-    #>  pages = {636--640}
+    #>  pages = {636--640},
     #> }
     #> 
     #> @article{bourke_colony_1999,
@@ -203,29 +179,29 @@ remotes::install_github("mbojan/zoterro")
     #>  month = mar,
     #>  year = {1999},
     #>  keywords = {complexity, reproductive conflict, social evolution, social insect, worker policing},
-    #>  pages = {245--257}
+    #>  pages = {245--257},
     #> }
     ```
 
-  - Fetch all items from a collection and save to BibTeX file
+-   Fetch all items from a collection and save to BibTeX file
     `references.bib`. Basically a conveniece wrapper for the example
     above.
-    
+
     ``` r
-    save_collection(
-      key="PJHH85S9", 
+    write_bib(
+      collection_key = "PJHH85S9",
       path = "references.bib",
       user = zotero_group_id(269768)
     )
     ```
 
-  - `zotero_api()` is a low-level function. It will make multiple
-    requests if the results do not fit a single response. The following
-    will fetch all items in the “My Publications” collection of the
-    default user:
-    
+-   `zotero_api()` is a low-level function. It will make multiple
+    requests if the results do not fit in a single response. The
+    following will fetch all items in the “My Publications” collection
+    of the default user:
+
     ``` r
-    zotero_api(path="publications/items")
+    zotero_api(path = "publications/items")
     ```
 
 ## Code of Conduct
