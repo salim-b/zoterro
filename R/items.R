@@ -175,8 +175,9 @@ write_bib <- function(collection_key = NULL,
             .x$`citation-key` <- citation_key
             .x$id <- citation_key
           }
-          .x
-        })
+          jsonlite::toJSON(.x)
+        }) %>%
+        jsonlite::toJSON(auto_unbox = TRUE, pretty = TRUE)
     }
   }
 
