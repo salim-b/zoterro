@@ -50,6 +50,58 @@ items <- function(collection_key = NULL,
 #' belonging to a Zotero user or group library, optionally limited to a
 #' specific collection.
 #'
+#' # Citation keys
+#'
+#' Generally, citation keys (or short "citekeys") are used in
+#' [WYSIWYM](https://en.wikipedia.org/wiki/WYSIWYM) editors – or more precisely
+#' their underlying syntaxes like LaTeX or [(Pandoc's)
+#' Markdown](https://pandoc.org/MANUAL.html#pandocs-markdown) – as
+#' human-friendly (i.e. easily memorizable) identifiers for bibliography items.
+#'
+#' For the storage of bibliographic metadata in general and the citation keys
+#' to identify individual bibliography items in particular, only in recent
+#' years a well-defined and open standard has become widely established:
+#' [**CSL-JSON**](https://github.com/citation-style-language/schema/#csl-json-schema).
+#'
+#' CSL-JSON offers i.a. a dedicated [`citation-key`
+#' field](https://github.com/citation-style-language/schema/blob/master/schemas/input/csl-data.json#L62-L64)
+#' which [differs from the `id`
+#' field](https://github.com/citation-style-language/schema/issues/243#issuecomment-643635052)
+#' in that it is meant for a *locally* unique identifier while the latter is
+#' designed to be a [*globally* unique
+#' identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier)
+#' (for which considerably more entropy is required, e.g. a 128-bit hash value,
+#' thus rendering it almost impossible to be user-memorizable).
+#'
+#' Unfortunately, the development of Zotero's internal metadata structure
+#' predates CSL-JSON by more than a decade and significantly differs from the
+#' former. To convert from one to another, non-trivial conversion steps are
+#' required. Specifically, Zotero has no notion of *stable* (and thus
+#' user-friendly) citation keys. Its internal data model [doesn't (yet) have a
+#' native field for
+#' them](https://forums.zotero.org/discussion/comment/318884/#Comment_318884)
+#' like CSL-JSON does with `citation-key`. Instead, Zotero auto-generates
+#' the keys only during export based on bibliography data like an author name or
+#' title and offers the user no means to customize them.
+#'
+#' This is where the Zotero add-on [Better BibTeX
+#' (BBT)](https://retorque.re/zotero-better-bibtex/) shines: It extends Zotero
+#' with the ability to [create stable citation
+#' keys](https://retorque.re/zotero-better-bibtex/citing/) besides offering
+#' other enhancements tailored to WYSIWYM users.
+#'
+#' The citation keys created by BBT can optionally be "pinned", meaning they
+#' are stored in Zotero's `Extra` field. While both Zotero's native CSL-JSON
+#' export as well as [BBT's Better CSL
+#' JSON](https://retorque.re/zotero-better-bibtex/installation/bundled-translators/)
+#' export functionality properly support pinned citation keys, [export via
+#' Zotero Web API
+#' v3](https://www.zotero.org/support/dev/web_api/v3/basics#export_formats)
+#' does **[not properly handle
+#' them](https://github.com/zotero/stream-server/issues/23)**. Therefore,
+#' `write_bib()` implements a workaround to restore pinned citation keys which
+#' is enabled by default (`use_pinned_citation_keys = TRUE`).
+#'
 #' @inheritParams items
 #' @param path Path to file.
 #' @param format Bibliographic data format used for export. One of:
@@ -63,6 +115,9 @@ items <- function(collection_key = NULL,
 #'   - `"rdf_zotero"`,
 #'   - `"ris"`,
 #'   - `"wikipedia"`
+#' @param use_pinned_citation_keys Whether or not to restore citation keys from
+#'   Zotero's `Extra` field and use them as item identifiers. Only relevant
+#'   for `format = "csljson"`. See section *Citation keys* for details.
 #'
 #'   For details, see the [relevant Zotero
 #'   documentation](https://www.zotero.org/support/dev/web_api/v3/basics#export_formats).
@@ -73,6 +128,7 @@ write_bib <- function(collection_key = NULL,
                       incl_children = TRUE,
                       path,
                       format = "bibtex",
+                      use_pinned_citation_keys = TRUE,
                       ...) {
   format <- match.arg(
     arg = format,
@@ -101,6 +157,29 @@ write_bib <- function(collection_key = NULL,
   # convert from raw to character if necessary
   # (affects all formats other than "wikipedia")
   if (is.raw(res)) res <- rawToChar(res)
+
+  # post-process "csljson" format
+  if (format == "csljson") {
+    # remove enwrapping `{"items": ...}`
+    res <- stringi::stri_extract(res, regex = "\\[[\\S\\s]*\\]")
+
+    # restore pinned citation keys if requested
+    if (use_pinned_citation_keys) {
+      res <- res %>%
+        jsonlite::fromJSON(simplifyVector = FALSE) %>%
+        purrr::map(~ {
+          citation_key <- stringi::stri_extract(
+            str = .x$note,
+            regex = "(?<=(^|;|\\s)Citation Key: )\\S*?(\\s|;|$)"
+          )
+          if (length(citation_key)) {
+            .x$`citation-key` <- citation_key
+            .x$id <- citation_key
+          }
+          .x
+        })
+    }
+  }
 
   cat(res, file = path)
 }
