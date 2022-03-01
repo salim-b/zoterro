@@ -98,8 +98,9 @@ write_bib <- function(collection_key = NULL,
     ...
   )
 
-  # all formats other than "wikipedia" are returned as raw vctrs
-  if (format != "wikipedia") res <- rawToChar(res)
+  # convert from raw to character if necessary
+  # (affects all formats other than "wikipedia")
+  if (is.raw(res)) res <- rawToChar(res)
 
   cat(res, file = path)
 }
