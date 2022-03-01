@@ -15,6 +15,7 @@ BugReports: https://github.com/mbojan/zoterro/issues
 Imports:
     dplyr,
     httr,
+    jsonlite,
     magrittr,
     purrr,
     stringi,

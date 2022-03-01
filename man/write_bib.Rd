@@ -9,6 +9,7 @@ write_bib(
   incl_children = TRUE,
   path,
   format = "bibtex",
+  use_pinned_citation_keys = TRUE,
   ...
 )
 }
@@ -34,7 +35,11 @@ sub-collections beneath the \code{collection_key}'s or the library's (if
 \item \code{"rdf_zotero"},
 \item \code{"ris"},
 \item \code{"wikipedia"}
-}
+}}
+
+\item{use_pinned_citation_keys}{Whether or not to restore citation keys from
+Zotero's \code{Extra} field and use them as item identifiers. Only relevant
+for \code{format = "csljson"}. See section \emph{Citation keys} for details.
 
 For details, see the \href{https://www.zotero.org/support/dev/web_api/v3/basics#export_formats}{relevant Zotero documentation}.}
 
@@ -45,6 +50,46 @@ Writes a file of the chosen bibliography \code{format} to \code{path} with items
 belonging to a Zotero user or group library, optionally limited to a
 specific collection.
 }
+\section{Citation keys}{
+Generally, citation keys (or short "citekeys") are used in
+\href{https://en.wikipedia.org/wiki/WYSIWYM}{WYSIWYM} editors – or more precisely
+their underlying syntaxes like LaTeX or \href{https://pandoc.org/MANUAL.html#pandocs-markdown}{(Pandoc's) Markdown} – as
+human-friendly (i.e. easily memorizable) identifiers for bibliography items.
+
+For the storage of bibliographic metadata in general and the citation keys
+to identify individual bibliography items in particular, only in recent
+years a well-defined and open standard has become widely established:
+\href{https://github.com/citation-style-language/schema/#csl-json-schema}{\strong{CSL-JSON}}.
+
+CSL-JSON offers i.a. a dedicated \href{https://github.com/citation-style-language/schema/blob/master/schemas/input/csl-data.json#L62-L64}{\code{citation-key} field}
+which \href{https://github.com/citation-style-language/schema/issues/243#issuecomment-643635052}{differs from the \code{id} field}
+in that it is meant for a \emph{locally} unique identifier while the latter is
+designed to be a \href{https://en.wikipedia.org/wiki/Universally_unique_identifier}{\emph{globally} unique identifier}
+(for which considerably more entropy is required, e.g. a 128-bit hash value,
+thus rendering it almost impossible to be user-memorizable).
+
+Unfortunately, the development of Zotero's internal metadata structure
+predates CSL-JSON by more than a decade and significantly differs from the
+former. To convert from one to another, non-trivial conversion steps are
+required. Specifically, Zotero has no notion of \emph{stable} (and thus
+user-friendly) citation keys. Its internal data model \href{https://forums.zotero.org/discussion/comment/318884/#Comment_318884}{doesn't (yet) have a native field for them}
+like CSL-JSON does with \code{citation-key}. Instead, Zotero auto-generates
+the keys only during export based on bibliography data like an author name or
+title and offers the user no means to customize them.
+
+This is where the Zotero add-on \href{https://retorque.re/zotero-better-bibtex/}{Better BibTeX (BBT)} shines: It extends Zotero
+with the ability to \href{https://retorque.re/zotero-better-bibtex/citing/}{create stable citation keys} besides offering
+other enhancements tailored to WYSIWYM users.
+
+The citation keys created by BBT can optionally be "pinned", meaning they
+are stored in Zotero's \code{Extra} field. While both Zotero's native CSL-JSON
+export as well as \href{https://retorque.re/zotero-better-bibtex/installation/bundled-translators/}{BBT's Better CSL JSON}
+export functionality properly support pinned citation keys, \href{https://www.zotero.org/support/dev/web_api/v3/basics#export_formats}{export via Zotero Web API v3}
+does \strong{\href{https://github.com/zotero/stream-server/issues/23}{not properly handle them}}. Therefore,
+\code{write_bib()} implements a workaround to restore pinned citation keys which
+is enabled by default (\code{use_pinned_citation_keys = TRUE}).
+}
+
 \seealso{
 Other Zotero items functions:
 \code{\link{add_archive_url}()},
