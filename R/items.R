@@ -156,6 +156,7 @@ write_bib <- function(collection_key = NULL,
 
   # all formats other than "wikipedia" are returned as raw vctrs
   if (format != "wikipedia") res <- rawToChar(res)
+
   # post-process "csljson" format
   if (format == "csljson") {
     # remove enwrapping `{"items": ...}`
