@@ -67,6 +67,7 @@ items <- function(collection_key = NULL,
 #'   For details, see the [relevant Zotero
 #'   documentation](https://www.zotero.org/support/dev/web_api/v3/basics#export_formats).
 #'
+#' @inherit base::cat return
 #' @family items
 #' @export
 write_bib <- function(collection_key = NULL,

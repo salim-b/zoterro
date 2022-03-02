@@ -40,6 +40,9 @@ For details, see the \href{https://www.zotero.org/support/dev/web_api/v3/basics#
 
 \item{...}{Other arguments passed to \code{\link[=zotero_api]{zotero_api()}}}
 }
+\value{
+None (invisible \code{NULL}).
+}
 \description{
 Writes a file of the chosen bibliography \code{format} to \code{path} with items
 belonging to a Zotero user or group library, optionally limited to a
