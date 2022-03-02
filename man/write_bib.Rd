@@ -74,8 +74,8 @@ former. To convert from one to another, non-trivial conversion steps are
 required. Specifically, Zotero has no notion of \emph{stable} (and thus
 user-friendly) citation keys. Its internal data model \href{https://forums.zotero.org/discussion/comment/318884/#Comment_318884}{doesn't (yet) have a native field for them}
 like CSL-JSON does with \code{citation-key}. Instead, Zotero auto-generates
-the keys only during export based on bibliography data like an author name or
-title and offers the user no means to customize them.
+the keys only during export based on bibliographic metadata like an author
+name or title and offers the user no means to customize them.
 
 This is where the Zotero add-on \href{https://retorque.re/zotero-better-bibtex/}{Better BibTeX (BBT)} shines: It extends Zotero
 with the ability to \href{https://retorque.re/zotero-better-bibtex/citing/}{create stable citation keys} besides offering

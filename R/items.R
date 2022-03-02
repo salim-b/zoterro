@@ -81,8 +81,8 @@ items <- function(collection_key = NULL,
 #' native field for
 #' them](https://forums.zotero.org/discussion/comment/318884/#Comment_318884)
 #' like CSL-JSON does with `citation-key`. Instead, Zotero auto-generates
-#' the keys only during export based on bibliography data like an author name or
-#' title and offers the user no means to customize them.
+#' the keys only during export based on bibliographic metadata like an author
+#' name or title and offers the user no means to customize them.
 #'
 #' This is where the Zotero add-on [Better BibTeX
 #' (BBT)](https://retorque.re/zotero-better-bibtex/) shines: It extends Zotero
