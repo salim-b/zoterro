@@ -83,7 +83,7 @@ other enhancements tailored to WYSIWYM users.
 
 The citation keys created by BBT can optionally be "pinned", meaning they
 are stored in Zotero's \code{Extra} field. While both Zotero's native CSL-JSON
-export as well as \href{https://retorque.re/zotero-better-bibtex/installation/bundled-translators/}{BBT's Better CSL JSON}
+export as well as \href{https://retorque.re/zotero-better-bibtex/installation/bundled-translators/}{BBT's \emph{Better CSL JSON}}
 export functionality properly support pinned citation keys, \href{https://www.zotero.org/support/dev/web_api/v3/basics#export_formats}{export via Zotero Web API v3}
 does \strong{\href{https://github.com/zotero/stream-server/issues/23}{not properly handle them}}. Therefore,
 \code{write_bib()} implements a workaround to restore pinned citation keys which
