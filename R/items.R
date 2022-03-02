@@ -122,6 +122,7 @@ items <- function(collection_key = NULL,
 #'   Zotero's `Extra` field and use them as item identifiers. Only relevant
 #'   for `format = "csljson"`. See section *Citation keys* for details.
 #'
+#' @inherit base::cat return
 #' @family items
 #' @export
 write_bib <- function(collection_key = NULL,
