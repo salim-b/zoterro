@@ -177,10 +177,17 @@ write_bib <- function(collection_key = NULL,
             .x$`citation-key` <- citation_key
             .x$id <- citation_key
           }
-          jsonlite::toJSON(.x)
+          .x
         }) %>%
-        jsonlite::toJSON(auto_unbox = TRUE, pretty = TRUE)
+        jsonlite::toJSON(auto_unbox = TRUE)
     }
+
+    # ensure (single) trailing newline (POSIX compliance)
+    res <- stringi::stri_replace(
+      str = res,
+      regex = "(\\s+)?$",
+      replacement = "\n"
+    )
   }
 
   cat(res, file = path)
