@@ -115,12 +115,12 @@ items <- function(collection_key = NULL,
 #'   - `"rdf_zotero"`,
 #'   - `"ris"`,
 #'   - `"wikipedia"`
-#' @param use_pinned_citation_keys Whether or not to restore citation keys from
-#'   Zotero's `Extra` field and use them as item identifiers. Only relevant
-#'   for `format = "csljson"`. See section *Citation keys* for details.
 #'
 #'   For details, see the [relevant Zotero
 #'   documentation](https://www.zotero.org/support/dev/web_api/v3/basics#export_formats).
+#' @param use_pinned_citation_keys Whether or not to restore citation keys from
+#'   Zotero's `Extra` field and use them as item identifiers. Only relevant
+#'   for `format = "csljson"`. See section *Citation keys* for details.
 #'
 #' @family items
 #' @export
