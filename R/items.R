@@ -92,8 +92,8 @@ items <- function(collection_key = NULL,
 #'
 #' The citation keys created by BBT can optionally be "pinned", meaning they
 #' are stored in Zotero's `Extra` field. While both Zotero's native CSL-JSON
-#' export as well as [BBT's Better CSL
-#' JSON](https://retorque.re/zotero-better-bibtex/installation/bundled-translators/)
+#' export as well as [BBT's *Better CSL
+#' JSON*](https://retorque.re/zotero-better-bibtex/installation/bundled-translators/)
 #' export functionality properly support pinned citation keys, [export via
 #' Zotero Web API
 #' v3](https://www.zotero.org/support/dev/web_api/v3/basics#export_formats)
