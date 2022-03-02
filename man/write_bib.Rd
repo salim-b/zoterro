@@ -15,7 +15,7 @@ write_bib(
 }
 \arguments{
 \item{collection_key}{\href{https://www.zotero.org/support/dev/web_api/v3/basics#collections}{Collection key},
-see \code{\link[=collections]{collections()}}.}
+see \code{\link[=collections]{collections()}}. If \code{NULL}, all items in the library are returned.}
 
 \item{incl_children}{Whether or not to include child items from
 sub-collections beneath the \code{collection_key}'s or the library's (if

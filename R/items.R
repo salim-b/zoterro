@@ -1,11 +1,11 @@
 #' Fetch Zotero library items
 #'
 #' Retrieves items belonging to a Zotero user or group library, optionally
-#' limited to a specific collection.
+#' limited to a specific collection. Trashed items are never included.
 #'
 #' @param collection_key [Collection
 #'   key](https://www.zotero.org/support/dev/web_api/v3/basics#collections),
-#'   see [collections()].
+#'   see [collections()]. If `NULL`, all items in the library are returned.
 #' @param incl_children Whether or not to include child items from
 #'   sub-collections beneath the `collection_key`'s or the library's (if
 #'   `collection_key = NULL`) top level.

@@ -8,7 +8,7 @@ items(collection_key = NULL, incl_children = TRUE, as_tibble = TRUE, ...)
 }
 \arguments{
 \item{collection_key}{\href{https://www.zotero.org/support/dev/web_api/v3/basics#collections}{Collection key},
-see \code{\link[=collections]{collections()}}.}
+see \code{\link[=collections]{collections()}}. If \code{NULL}, all items in the library are returned.}
 
 \item{incl_children}{Whether or not to include child items from
 sub-collections beneath the \code{collection_key}'s or the library's (if
@@ -26,7 +26,7 @@ A \link[tibble:tbl_df-class]{tibble} if \code{as_tibble = TRUE}, otherwise a lis
 }
 \description{
 Retrieves items belonging to a Zotero user or group library, optionally
-limited to a specific collection.
+limited to a specific collection. Trashed items are never included.
 }
 \examples{
 # items from public libraries can be fetched without an API key
