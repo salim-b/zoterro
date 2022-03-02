@@ -35,13 +35,13 @@ sub-collections beneath the \code{collection_key}'s or the library's (if
 \item \code{"rdf_zotero"},
 \item \code{"ris"},
 \item \code{"wikipedia"}
-}}
+}
+
+For details, see the \href{https://www.zotero.org/support/dev/web_api/v3/basics#export_formats}{relevant Zotero documentation}.}
 
 \item{use_pinned_citation_keys}{Whether or not to restore citation keys from
 Zotero's \code{Extra} field and use them as item identifiers. Only relevant
-for \code{format = "csljson"}. See section \emph{Citation keys} for details.
-
-For details, see the \href{https://www.zotero.org/support/dev/web_api/v3/basics#export_formats}{relevant Zotero documentation}.}
+for \code{format = "csljson"}. See section \emph{Citation keys} for details.}
 
 \item{...}{Other arguments passed to \code{\link[=zotero_api]{zotero_api()}}}
 }
