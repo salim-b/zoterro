@@ -253,9 +253,9 @@ as_item_tibble_helper <- function(item) {
 
 #' Add archive URLs from "Robust Link" attachments
 #'
-#' Adds a top-level column `archiveUrl` with archive links extracted from item
-#' attachments created by the [Zotero Robust
-#' Links](https://robustlinks.mementoweb.org/zotero/) add-on.
+#' Adds a top-level column `archiveUrl` extracted from the item's corresponding
+#' [Zotero Robust
+#' Links](https://robustlinks.mementoweb.org/zotero/) attachment.
 #'
 #' An example of a "Robust Link" attachment can be viewed via [this
 #' link](https://www.zotero.org/groups/4603023/zoterro_testing/items/KC6WFG78/attachment/EE7ZQ6PD/library).
@@ -291,21 +291,24 @@ add_archive_url <- function(items) {
   }
 
   # "Robust Link" attachments are children of top-level items
-  dplyr::left_join(
-    x = items,
-    y = items %>%
-      dplyr::filter(
-        !is.na(parentItem)
-        & itemType == "attachment"
-        & title == "Robust Link"
-      ) %>%
-      dplyr::transmute(
-        key = parentItem,
-        archiveUrl = stringi::stri_extract(
-          str = note,
-          regex = '(?<=Memento URL: <a href=").*?(?=")'
-        )
-      ),
-    by = "key"
-  )
+  items %>%
+    dplyr::filter(
+      !is.na(parentItem)
+      & itemType == "attachment"
+      & title == "Robust Link"
+    ) %>%
+    # reduce to single attachment per parent item
+    dplyr::filter(!duplicated(parentItem)) %>%
+    # extract archive url
+    dplyr::transmute(
+      key = parentItem,
+      archiveUrl = stringi::stri_extract(
+        str = note,
+        regex = '(?<=Memento URL: <a href=").*?(?=")'
+      )
+    ) %>%
+    dplyr::left_join(
+      x = items,
+      by = "key"
+    )
 }

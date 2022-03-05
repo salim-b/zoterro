@@ -15,8 +15,8 @@ and \code{title}.}
 A \link[tibble:tbl_df-class]{tibble}.
 }
 \description{
-Adds a top-level column \code{archiveUrl} with archive links extracted from item
-attachments created by the \href{https://robustlinks.mementoweb.org/zotero/}{Zotero Robust Links} add-on.
+Adds a top-level column \code{archiveUrl} extracted from the item's corresponding
+\href{https://robustlinks.mementoweb.org/zotero/}{Zotero Robust Links} attachment.
 }
 \details{
 An example of a "Robust Link" attachment can be viewed via \href{https://www.zotero.org/groups/4603023/zoterro_testing/items/KC6WFG78/attachment/EE7ZQ6PD/library}{this link}.
