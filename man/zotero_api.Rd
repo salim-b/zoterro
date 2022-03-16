@@ -11,6 +11,7 @@ zotero_api(
   path = NULL,
   user = zotero_usr(),
   api_key = zotero_key(),
+  modified_since = NULL,
   verbose = getOption("zoterro.verbose", FALSE),
   ...
 )
@@ -36,12 +37,24 @@ without the \verb{<userOrGroupPrefix>/}. e.g. \code{items/top}.}
 See \code{\link[=zotero_key]{zotero_key()}}. If \code{NULL}, authentication is omitted, resulting in
 limited access to public Zotero libraries only.}
 
+\item{modified_since}{Optional \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number}. If the
+Zotero library's content hasn't changed since the specified version
+number, a zero-length \link[=raw]{raw vector} will be returned instead of the
+actual library content (and the performed API request will be
+significantly faster). See section \emph{Caching} below for further details.}
+
 \item{verbose}{Whether or not to print called API URLs to the console.}
 
 \item{...}{Further arguments passed on to \code{\link[httr:RETRY]{httr::RETRY()}}.}
 }
 \value{
-List of \code{response} objects (c.f. \code{\link[httr:GET]{httr::GET()}}).
+If \code{modified_since = NULL} or the Zotero library's content has changed since
+the specified \code{modified_since} version, a list of
+\code{\link[httr:response]{response}} objects. Otherwise, a zero-length \link[=raw]{raw vector}.
+
+In both cases, the returned object has a \code{version} \link[=attr]{attribute} set to
+the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned by
+the API.
 }
 \description{
 Fetch data from Zotero using API ver. 3. If the result is broken into
@@ -62,6 +75,29 @@ By default, \code{zotero_api()} respects the following \R options:
 \item \strong{\code{zoterro.key}} (defaults to \code{\link[=zotero_key]{zotero_key()}}): Personal \href{https://www.zotero.org/support/dev/web_api/v3/basics#authentication}{Zotero Web API key}.
 \item \strong{\code{zoterro.verbose}} (defaults to \code{FALSE}): Whether or not to print
 called API URLs to the console.
+}
+\subsection{Caching}{
+
+As the \href{https://www.zotero.org/support/dev/web_api/v3/basics#caching}{official API documentation states},
+"every Zotero library and object (collection, item, etc.) on the server has
+an associated version number. The version number can be used to determine
+whether a client has up-to-date data for a library or object, allowing for
+efficient and safe syncing."
+
+\code{zotero_api()} supports this caching mechanism via the \code{modified_since}
+parameter. If the Zotero library's content hasn't changed since the version
+number specified in \code{modified_since}, a zero-length \link[=raw]{raw vector} will
+be returned instead of the actual library content. In this case, the
+performed API request will be significantly faster since the body is omitted
+in the corresponding HTTP response.
+
+The object returned by \code{zotero_api()} always has a \code{version}
+\link[=attr]{attribute} set to the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned by
+the API (corresponding to the current version number of the library (for
+multi-object requests) or object (for single-object requests)). You could
+provide this number as the \code{modified_since} argument to subsequent
+\code{zotero_api()} calls in order to use the API more efficiently (and thereby
+implement some form of caching).
 }
 }
 \examples{

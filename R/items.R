@@ -15,8 +15,12 @@
 #'   items data. See [as_item_tibble()] for details.
 #' @param ... Other arguments passed to [zotero_api()]
 #'
+#' @return
+#' A [tibble][tibble::tbl_df] if `as_tibble = TRUE`, otherwise a list.
+#'
+#' In both cases the returned object `r snippet_version_attr`
+#'
 #' @export
-#' @return A [tibble][tibble::tbl_df] if `as_tibble = TRUE`, otherwise a list.
 #' @family items
 #' @examples
 #' # items from public libraries can be fetched without an API key
@@ -151,6 +155,7 @@ as_item_tibble <- function(items) {
     res <- as_item_tibble_helper(items)
   }
 
+  attr(res, which = "version") <- attr(items, "version")
   res
 }
 
