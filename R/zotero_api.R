@@ -21,11 +21,17 @@
 #'   key](https://www.zotero.org/support/dev/web_api/v3/basics#authentication).
 #'   See [zotero_key()]. If `NULL`, authentication is omitted, resulting in
 #'   limited access to public Zotero libraries only.
+#' @param modified_since Optional [Zotero library version
+#'   number](https://www.zotero.org/support/dev/web_api/v3/syncing). If the
+#'   Zotero library's content hasn't changed since the specified version
+#'   number, a zero-length [raw vector][raw()] will be returned instead of the
+#'   actual library content (and the performed API request will be
+#'   significantly faster). See section *Caching* below for further details.
 #' @param verbose Whether or not to print called API URLs to the console.
-#' @param ... Further arguments passed on to [httr::GET()].
+#' @param ... Further arguments passed on to [httr::RETRY()].
 #'
 #' @details
-#' The `user` argument expects Zotero user or group ID. Use [zotero_user_id()]
+#' The `user` argument expects a Zotero user or group ID. Use [zotero_user_id()]
 #' or [zotero_group_id()] to pass it. By default [zotero_usr()] is called which
 #' fetches the ID from the \R option `zoterro.user` or the environment variable
 #' `ZOTERO_USER`.
@@ -33,14 +39,49 @@
 #' The URL of the request will contain the appropriate user/group ID prefix
 #' which will be combined with `path` or `query` when supplied.
 #'
-#' The function is by default responsive to the following \R options:
+#' By default, `zotero_api()` respects the following \R options:
 #'
-#' - **`zoterro.user`** (default [zotero_usr()]): Zotero user ID.
-#' - **`zoterro.key`** (default [zotero_key()]): Personal [Zotero Web API
+#' - **`zoterro.user`** (defaults to [zotero_usr()]): Zotero user ID.
+#' - **`zoterro.key`** (defaults to [zotero_key()]): Personal [Zotero Web API
 #'   key](https://www.zotero.org/support/dev/web_api/v3/basics#authentication).
-#' - **`zoterro.verbose`** (default `FALSE`): Give more feedback when running.
+#' - **`zoterro.verbose`** (defaults to `FALSE`): Whether or not to print
+#'   called API URLs to the console.
 #'
-#' @return List of `response` objects (c.f. [httr::GET()]).
+#' ## Caching
+#'
+#' As the [official API documentation
+#' states](https://www.zotero.org/support/dev/web_api/v3/basics#caching),
+#' "every Zotero library and object (collection, item, etc.) on the server has
+#' an associated version number. The version number can be used to determine
+#' whether a client has up-to-date data for a library or object, allowing for
+#' efficient and safe syncing."
+#'
+#' `zotero_api()` supports this caching mechanism via the `modified_since`
+#' parameter. If the Zotero library's content hasn't changed since the version
+#' number specified in `modified_since`, a zero-length [raw vector][raw()] will
+#' be returned instead of the actual library content. In this case, the
+#' performed API request will be significantly faster since the body is omitted
+#' in the corresponding HTTP response.
+#'
+#' The object returned by `zotero_api()` always has a `version`
+#' [attribute][attr] set to the [Zotero library version
+#' number](https://www.zotero.org/support/dev/web_api/v3/syncing) returned by
+#' the API (corresponding to the current version number of the library (for
+#' multi-object requests) or object (for single-object requests)). You could
+#' provide this number as the `modified_since` argument to subsequent
+#' `zotero_api()` calls in order to use the API more efficiently (and thereby
+#' implement some form of caching).
+#'
+#' @return
+#' If `modified_since = NULL` or the Zotero library's content has changed since
+#' the specified `modified_since` version, a list of
+#' [`response`][httr::response] objects. Otherwise, a zero-length [raw
+#' vector][raw()].
+#'
+#' In both cases, the returned object has a `version` [attribute][attr] set to
+#' the [Zotero library version
+#' number](https://www.zotero.org/support/dev/web_api/v3/syncing) returned by
+#' the API.
 #'
 #' @export
 #'
@@ -60,6 +101,7 @@ zotero_api <- function(
   path = NULL,
   user = zotero_usr(),
   api_key = zotero_key(),
+  modified_since = NULL,
   verbose = getOption("zoterro.verbose", FALSE),
   ...
   ) {
@@ -78,24 +120,36 @@ zotero_api <- function(
     url = u,
     user = user,
     api_key = api_key,
+    modified_since = modified_since,
     ...
     )
   result <- list(resp)
 
-  while(fetch_subsequent && has_next(resp)) {
+  if (status_code(resp) == 304) {
+    version <- as.integer(modified_since)
+  } else {
+    version <- as.integer(headers(resp)$`last-modified-version`)
+  }
+  if (!length(version)) version <- NULL
+
+  while (fetch_subsequent && has_next(resp)) {
     l <- zotero_response_links(resp)
-    if(verbose) {
+    if (verbose) {
       pretty_links(l)
     }
     resp <- zotero_get(
       url = l["next"],
       user = user,
       api_key = api_key,
+      modified_since = modified_since,
       ...
     )
     result <- c(result, list(resp))
   }
-  parse_results(result) # List of responses
+
+  result <- parse_results(result)
+  attr(result, which = "version") <- version
+  result
 }
 
 
@@ -106,6 +160,7 @@ zotero_get <- function(
     url,
     user,
     api_key = NULL,
+    modified_since = NULL,
     ...
 ) {
 
@@ -114,7 +169,8 @@ zotero_get <- function(
     url = url,
     config = add_headers(
       "Zotero-API-Key" = api_key,
-      "Zotero-API-Version" = 3
+      "Zotero-API-Version" = 3,
+      "If-Modified-Since-Version" = modified_since
     ),
     ...,
     times = 3,
@@ -122,8 +178,8 @@ zotero_get <- function(
     terminate_on = c(403)
   )
 
-  if(http_error(resp)) {
-    if(status_code(resp) == 403) {
+  if (http_error(resp)) {
+    if (status_code(resp) == 403) {
       msg <- paste0(
         "No permission to access the Zotero library with ",
         ifelse(inherits(user, "zotero_user_id"), "user", "group"), " ID ",
@@ -157,7 +213,7 @@ zotero_get <- function(
 is_api_key_valid <- function(api_key,
                              url) {
 
-  if(is.null(api_key)) return(FALSE)
+  if (is.null(api_key)) return(FALSE)
 
   resp <- RETRY(
     verb = "GET",
@@ -167,7 +223,7 @@ is_api_key_valid <- function(api_key,
     quiet = TRUE
   )
 
-  if(http_error(resp)) return(FALSE)
+  if (http_error(resp)) return(FALSE)
 
   TRUE
 }
@@ -184,7 +240,7 @@ is_api_key_valid <- function(api_key,
 #'
 #' @keywords internal
 zotero_response_links <- function(r, ...) {
-  if(is.null(r$headers$link)) return(FALSE)
+  if (is.null(r$headers$link)) return(FALSE)
   # Links to the the other pages of the resultset
   r$headers$link %>%
     strsplit(", ") %>%
@@ -227,3 +283,15 @@ parse_results <- function(x, ...) UseMethod("parse_results")
 parse_results.default <- function(x, ...) {
   do.call("c", lapply(x, content))
 }
+
+
+
+# re-usable documentation content
+snippet_version_attr <- "
+- has a `version` [attribute][attr] set to the [Zotero library version
+  number](https://www.zotero.org/support/dev/web_api/v3/syncing) returned by
+  the API.
+- is of length `0` if the Zotero library's content hasn't changed since the
+  version number specified in `modified_since`.
+
+See section *Caching* in [zotero_api()] for further details."

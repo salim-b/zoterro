@@ -23,6 +23,16 @@ items data. See \code{\link[=as_item_tibble]{as_item_tibble()}} for details.}
 }
 \value{
 A \link[tibble:tbl_df-class]{tibble} if \code{as_tibble = TRUE}, otherwise a list.
+
+In both cases the returned object
+\itemize{
+\item has a \code{version} \link[=attr]{attribute} set to the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned by
+the API.
+\item is of length \code{0} if the Zotero library's content hasn't changed since the
+version number specified in \code{modified_since}.
+}
+
+See section \emph{Caching} in \code{\link[=zotero_api]{zotero_api()}} for further details.
 }
 \description{
 Retrieves items belonging to a Zotero user or group library, optionally

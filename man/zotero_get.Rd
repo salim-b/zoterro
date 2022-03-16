@@ -4,7 +4,7 @@
 \alias{zotero_get}
 \title{Make a single request}
 \usage{
-zotero_get(url, user, api_key = NULL, ...)
+zotero_get(url, user, api_key = NULL, modified_since = NULL, ...)
 }
 \description{
 Make a single request
