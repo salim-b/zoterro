@@ -1,6 +1,6 @@
 Package: zoterro
 Title: Zotero Web API Interface
-Version: 0.1.9000
+Version: 0.1.9001
 Authors@R: c(
     person("Michal", "Bojanowski", , "michal2992@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7503-852X")),
