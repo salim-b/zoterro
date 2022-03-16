@@ -91,7 +91,7 @@ be returned instead of the actual library content. In this case, the
 performed API request will be significantly faster since the body is omitted
 in the corresponding HTTP response.
 
-The object returned by \code{zotero_api()} always has a \code{version}
+Otherwise, the object returned by \code{zotero_api()} has a \code{version}
 \link[=attr]{attribute} set to the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned by
 the API (corresponding to the current version number of the library (for
 multi-object requests) or object (for single-object requests)). You could

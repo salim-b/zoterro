@@ -63,7 +63,7 @@
 #' performed API request will be significantly faster since the body is omitted
 #' in the corresponding HTTP response.
 #'
-#' The object returned by `zotero_api()` always has a `version`
+#' Otherwise, the object returned by `zotero_api()` has a `version`
 #' [attribute][attr] set to the [Zotero library version
 #' number](https://www.zotero.org/support/dev/web_api/v3/syncing) returned by
 #' the API (corresponding to the current version number of the library (for
@@ -125,11 +125,7 @@ zotero_api <- function(
     )
   result <- list(resp)
 
-  if (status_code(resp) == 304) {
-    version <- as.integer(modified_since)
-  } else {
-    version <- as.integer(headers(resp)$`last-modified-version`)
-  }
+  version <- as.integer(headers(resp)$`last-modified-version`)
   if (!length(version)) version <- NULL
 
   while (fetch_subsequent && has_next(resp)) {
@@ -287,11 +283,10 @@ parse_results.default <- function(x, ...) {
 
 
 # re-usable documentation content
-snippet_version_attr <- "
-- has a `version` [attribute][attr] set to the [Zotero library version
-  number](https://www.zotero.org/support/dev/web_api/v3/syncing) returned by
-  the API.
-- is of length `0` if the Zotero library's content hasn't changed since the
-  version number specified in `modified_since`.
+snippet_version_attr <- "is of length `0` if the Zotero library's content
+hasn't changed since the version number specified in `modified_since`.
+Otherwise it has a `version` [attribute][attr] set to the [Zotero library
+version number](https://www.zotero.org/support/dev/web_api/v3/syncing) returned
+by the API.
 
 See section *Caching* in [zotero_api()] for further details."

@@ -18,7 +18,7 @@
 #' @return
 #' A [tibble][tibble::tbl_df] if `as_tibble = TRUE`, otherwise a list.
 #'
-#' In both cases the returned object `r snippet_version_attr`
+#' Note that the returned object `r snippet_version_attr`
 #'
 #' @export
 #' @family items
@@ -125,8 +125,19 @@ items <- function(collection_key = NULL,
 #' @param use_pinned_citation_keys Whether or not to restore citation keys from
 #'   Zotero's `Extra` field and use them as item identifiers. Only relevant
 #'   for `format = "csljson"`. See section *Citation keys* for details.
+#' @param modified_since Optional [Zotero library version
+#'   number](https://www.zotero.org/support/dev/web_api/v3/syncing). If the
+#'   Zotero library's content hasn't changed since the specified version
+#'   number, nothing will be written to `path` (and the performed API request
+#'   will be significantly faster). See section *Caching* in [zotero_api()] for
+#'   further details.
 #'
-#' @inherit base::cat return
+#' @return
+#' A character scalar of the Zotero Library items in the specified `format`,
+#' invisibly.
+#'
+#' Note that it `r snippet_version_attr`
+#'
 #' @family items
 #' @export
 write_bib <- function(collection_key = NULL,
@@ -134,6 +145,7 @@ write_bib <- function(collection_key = NULL,
                       path,
                       format = "bibtex",
                       use_pinned_citation_keys = TRUE,
+                      modified_since = NULL,
                       ...) {
   format <- match.arg(
     arg = format,
@@ -151,26 +163,29 @@ write_bib <- function(collection_key = NULL,
                 # "tei",       # returns internal server error (500)
                 "wikipedia")
   )
-  res <- items(
+  response <- items(
     collection_key = collection_key,
     incl_children = incl_children,
     as_tibble = FALSE,
     query = list(format = format),
+    modified_since = modified_since,
     ...
   )
+  version <- attr(response, which = "version")
+  result <- response
 
   # convert from raw to character if necessary
   # (affects all formats other than "wikipedia")
-  if (is.raw(res)) res <- rawToChar(res)
+  if (is.raw(result)) result <- rawToChar(result)
 
   # post-process "csljson" format
   if (format == "csljson") {
     # remove enwrapping `{"items": ...}`
-    res <- stringi::stri_extract(res, regex = "\\[[\\S\\s]*\\]")
+    result <- stringi::stri_extract(result, regex = "\\[[\\S\\s]*\\]")
 
     # restore pinned citation keys if requested
     if (use_pinned_citation_keys) {
-      res <- res %>%
+      result <- result %>%
         jsonlite::fromJSON(simplifyVector = FALSE) %>%
         purrr::map(~ {
           citation_key <- stringi::stri_extract(
@@ -187,14 +202,23 @@ write_bib <- function(collection_key = NULL,
     }
 
     # ensure (single) trailing newline (POSIX compliance)
-    res <- stringi::stri_replace(
-      str = res,
+    result <- stringi::stri_replace(
+      str = result,
       regex = "(\\s+)?$",
       replacement = "\n"
     )
   }
 
-  cat(res, file = path)
+  if (!is.null(version)) {
+
+    cat(result, file = path)
+
+  } else {
+    result <- character()
+  }
+
+  attr(result, which = "version") <- version
+  invisible(result)
 }
 
 #' Convert Zotero library items list to a tibble
