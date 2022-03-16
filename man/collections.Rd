@@ -17,13 +17,10 @@ A \link[tibble:tbl_df-class]{tibble} with columns:
 \item \code{parent_key}: Key of the parent collection (\code{NA} if no parent collection exists).
 }
 
-Note that the tibble
-\itemize{
-\item has a \code{version} \link[=attr]{attribute} set to the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned by
-the API.
-\item is of length \code{0} if the Zotero library's content hasn't changed since the
-version number specified in \code{modified_since}.
-}
+Note that the tibble is of length \code{0} if the Zotero library's content
+hasn't changed since the version number specified in \code{modified_since}.
+Otherwise it has a \code{version} \link[=attr]{attribute} set to the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned
+by the API.
 
 See section \emph{Caching} in \code{\link[=zotero_api]{zotero_api()}} for further details.
 }

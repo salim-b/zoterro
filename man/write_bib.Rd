@@ -9,6 +9,7 @@ write_bib(
   incl_children = TRUE,
   path,
   format = "bibtex",
+  modified_since = NULL,
   ...
 )
 }
@@ -38,10 +39,24 @@ sub-collections beneath the \code{collection_key}'s or the library's (if
 
 For details, see the \href{https://www.zotero.org/support/dev/web_api/v3/basics#export_formats}{relevant Zotero documentation}.}
 
+\item{modified_since}{Optional \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number}. If the
+Zotero library's content hasn't changed since the specified version
+number, nothing will be written to \code{path} (and the performed API request
+will be significantly faster). See section \emph{Caching} in \code{\link[=zotero_api]{zotero_api()}} for
+further details.}
+
 \item{...}{Other arguments passed to \code{\link[=zotero_api]{zotero_api()}}}
 }
 \value{
-None (invisible \code{NULL}).
+A character scalar of the Zotero Library items in the specified \code{format},
+invisibly.
+
+Note that it is of length \code{0} if the Zotero library's content
+hasn't changed since the version number specified in \code{modified_since}.
+Otherwise it has a \code{version} \link[=attr]{attribute} set to the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned
+by the API.
+
+See section \emph{Caching} in \code{\link[=zotero_api]{zotero_api()}} for further details.
 }
 \description{
 Writes a file of the chosen bibliography \code{format} to \code{path} with items

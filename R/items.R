@@ -18,7 +18,7 @@
 #' @return
 #' A [tibble][tibble::tbl_df] if `as_tibble = TRUE`, otherwise a list.
 #'
-#' In both cases the returned object `r snippet_version_attr`
+#' Note that the returned object `r snippet_version_attr`
 #'
 #' @export
 #' @family items
@@ -70,14 +70,26 @@ items <- function(collection_key = NULL,
 #'
 #'   For details, see the [relevant Zotero
 #'   documentation](https://www.zotero.org/support/dev/web_api/v3/basics#export_formats).
+#' @param modified_since Optional [Zotero library version
+#'   number](https://www.zotero.org/support/dev/web_api/v3/syncing). If the
+#'   Zotero library's content hasn't changed since the specified version
+#'   number, nothing will be written to `path` (and the performed API request
+#'   will be significantly faster). See section *Caching* in [zotero_api()] for
+#'   further details.
 #'
-#' @inherit base::cat return
+#' @return
+#' A character scalar of the Zotero Library items in the specified `format`,
+#' invisibly.
+#'
+#' Note that it `r snippet_version_attr`
+#'
 #' @family items
 #' @export
 write_bib <- function(collection_key = NULL,
                       incl_children = TRUE,
                       path,
                       format = "bibtex",
+                      modified_since = NULL,
                       ...) {
   format <- match.arg(
     arg = format,
@@ -95,19 +107,31 @@ write_bib <- function(collection_key = NULL,
                 # "tei",       # returns internal server error (500)
                 "wikipedia")
   )
-  res <- items(
+  response <- items(
     collection_key = collection_key,
     incl_children = incl_children,
     as_tibble = FALSE,
     query = list(format = format),
+    modified_since = modified_since,
     ...
   )
+  version <- attr(response, which = "version")
+  result <- response
 
   # convert from raw to character if necessary
   # (affects all formats other than "wikipedia")
-  if (is.raw(res)) res <- rawToChar(res)
+  if (is.raw(result)) result <- rawToChar(result)
 
-  cat(res, file = path)
+  if (!is.null(version)) {
+
+    cat(result, file = path)
+
+  } else {
+    result <- character()
+  }
+
+  attr(result, which = "version") <- version
+  invisible(result)
 }
 
 #' Convert Zotero library items list to a tibble
