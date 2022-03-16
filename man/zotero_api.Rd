@@ -38,7 +38,7 @@ limited access to public Zotero libraries only.}
 
 \item{verbose}{Whether or not to print called API URLs to the console.}
 
-\item{...}{Further arguments passed on to \code{\link[httr:GET]{httr::GET()}}.}
+\item{...}{Further arguments passed on to \code{\link[httr:RETRY]{httr::RETRY()}}.}
 }
 \value{
 List of \code{response} objects (c.f. \code{\link[httr:GET]{httr::GET()}}).
@@ -48,7 +48,7 @@ Fetch data from Zotero using API ver. 3. If the result is broken into
 multiple parts, multiple requests are made to fetch everything.
 }
 \details{
-The \code{user} argument expects Zotero user or group ID. Use \code{\link[=zotero_user_id]{zotero_user_id()}}
+The \code{user} argument expects a Zotero user or group ID. Use \code{\link[=zotero_user_id]{zotero_user_id()}}
 or \code{\link[=zotero_group_id]{zotero_group_id()}} to pass it. By default \code{\link[=zotero_usr]{zotero_usr()}} is called which
 fetches the ID from the \R option \code{zoterro.user} or the environment variable
 \code{ZOTERO_USER}.
@@ -56,11 +56,12 @@ fetches the ID from the \R option \code{zoterro.user} or the environment variabl
 The URL of the request will contain the appropriate user/group ID prefix
 which will be combined with \code{path} or \code{query} when supplied.
 
-The function is by default responsive to the following \R options:
+By default, \code{zotero_api()} respects the following \R options:
 \itemize{
-\item \strong{\code{zoterro.user}} (default \code{\link[=zotero_usr]{zotero_usr()}}): Zotero user ID.
-\item \strong{\code{zoterro.key}} (default \code{\link[=zotero_key]{zotero_key()}}): Personal \href{https://www.zotero.org/support/dev/web_api/v3/basics#authentication}{Zotero Web API key}.
-\item \strong{\code{zoterro.verbose}} (default \code{FALSE}): Give more feedback when running.
+\item \strong{\code{zoterro.user}} (defaults to \code{\link[=zotero_usr]{zotero_usr()}}): Zotero user ID.
+\item \strong{\code{zoterro.key}} (defaults to \code{\link[=zotero_key]{zotero_key()}}): Personal \href{https://www.zotero.org/support/dev/web_api/v3/basics#authentication}{Zotero Web API key}.
+\item \strong{\code{zoterro.verbose}} (defaults to \code{FALSE}): Whether or not to print
+called API URLs to the console.
 }
 }
 \examples{

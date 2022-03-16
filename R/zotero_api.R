@@ -22,10 +22,10 @@
 #'   See [zotero_key()]. If `NULL`, authentication is omitted, resulting in
 #'   limited access to public Zotero libraries only.
 #' @param verbose Whether or not to print called API URLs to the console.
-#' @param ... Further arguments passed on to [httr::GET()].
+#' @param ... Further arguments passed on to [httr::RETRY()].
 #'
 #' @details
-#' The `user` argument expects Zotero user or group ID. Use [zotero_user_id()]
+#' The `user` argument expects a Zotero user or group ID. Use [zotero_user_id()]
 #' or [zotero_group_id()] to pass it. By default [zotero_usr()] is called which
 #' fetches the ID from the \R option `zoterro.user` or the environment variable
 #' `ZOTERO_USER`.
@@ -33,12 +33,13 @@
 #' The URL of the request will contain the appropriate user/group ID prefix
 #' which will be combined with `path` or `query` when supplied.
 #'
-#' The function is by default responsive to the following \R options:
+#' By default, `zotero_api()` respects the following \R options:
 #'
-#' - **`zoterro.user`** (default [zotero_usr()]): Zotero user ID.
-#' - **`zoterro.key`** (default [zotero_key()]): Personal [Zotero Web API
+#' - **`zoterro.user`** (defaults to [zotero_usr()]): Zotero user ID.
+#' - **`zoterro.key`** (defaults to [zotero_key()]): Personal [Zotero Web API
 #'   key](https://www.zotero.org/support/dev/web_api/v3/basics#authentication).
-#' - **`zoterro.verbose`** (default `FALSE`): Give more feedback when running.
+#' - **`zoterro.verbose`** (defaults to `FALSE`): Whether or not to print
+#'   called API URLs to the console.
 #'
 #' @return List of `response` objects (c.f. [httr::GET()]).
 #'
@@ -84,7 +85,7 @@ zotero_api <- function(
 
   while(fetch_subsequent && has_next(resp)) {
     l <- zotero_response_links(resp)
-    if(verbose) {
+    if (verbose) {
       pretty_links(l)
     }
     resp <- zotero_get(
@@ -122,8 +123,8 @@ zotero_get <- function(
     terminate_on = c(403)
   )
 
-  if(http_error(resp)) {
-    if(status_code(resp) == 403) {
+  if (http_error(resp)) {
+    if (status_code(resp) == 403) {
       msg <- paste0(
         "No permission to access the Zotero library with ",
         ifelse(inherits(user, "zotero_user_id"), "user", "group"), " ID ",
@@ -157,7 +158,7 @@ zotero_get <- function(
 is_api_key_valid <- function(api_key,
                              url) {
 
-  if(is.null(api_key)) return(FALSE)
+  if (is.null(api_key)) return(FALSE)
 
   resp <- RETRY(
     verb = "GET",
@@ -167,7 +168,7 @@ is_api_key_valid <- function(api_key,
     quiet = TRUE
   )
 
-  if(http_error(resp)) return(FALSE)
+  if (http_error(resp)) return(FALSE)
 
   TRUE
 }
@@ -184,7 +185,7 @@ is_api_key_valid <- function(api_key,
 #'
 #' @keywords internal
 zotero_response_links <- function(r, ...) {
-  if(is.null(r$headers$link)) return(FALSE)
+  if (is.null(r$headers$link)) return(FALSE)
   # Links to the the other pages of the resultset
   r$headers$link %>%
     strsplit(", ") %>%
