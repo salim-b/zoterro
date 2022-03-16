@@ -179,7 +179,7 @@ write_bib <- function(collection_key = NULL,
   if (is.raw(result)) result <- rawToChar(result)
 
   # post-process "csljson" format
-  if (format == "csljson") {
+  if (format == "csljson" && !is.null(version)) {
     # remove enwrapping `{"items": ...}`
     result <- stringi::stri_extract(result, regex = "\\[[\\S\\s]*\\]")
 
