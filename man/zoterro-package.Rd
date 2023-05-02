@@ -6,7 +6,7 @@
 \alias{zoterro-package}
 \title{zoterro: Zotero Web API Interface}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
 Accessing Zotero web API to fetch/put/manipulate bibliographical data.
 }
