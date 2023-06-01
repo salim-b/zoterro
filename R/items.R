@@ -190,7 +190,7 @@ write_bib <- function(collection_key = NULL,
         purrr::map(~ {
           citation_key <- stringi::stri_extract(
             str = .x$note,
-            regex = "(?<=(^|;|\\s)Citation Key: )\\S*?(\\s|;|$)"
+            regex = "(?<=(^|;|\\s)Citation Key: )\\S*?(?=\\s|;|$)"
           )
           if (length(citation_key)) {
             .x$`citation-key` <- citation_key
