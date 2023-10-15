@@ -100,7 +100,7 @@ items <- function(collection_key = NULL,
 #' JSON*](https://retorque.re/zotero-better-bibtex/installation/bundled-translators/)
 #' export functionality properly support pinned citation keys, [export via
 #' Zotero Web API
-#' v3](https://www.zotero.org/support/dev/web_api/v3/basics#export_formats)
+#' v3](https://www.zotero.org/support/dev/web_api/v3/basics#item_export_formats)
 #' does **[not properly handle
 #' them](https://github.com/zotero/stream-server/issues/23)**. Therefore,
 #' `write_bib()` implements a workaround to restore pinned citation keys which
@@ -121,7 +121,7 @@ items <- function(collection_key = NULL,
 #'   - `"wikipedia"`
 #'
 #'   For details, see the [relevant Zotero
-#'   documentation](https://www.zotero.org/support/dev/web_api/v3/basics#export_formats).
+#'   documentation](https://www.zotero.org/support/dev/web_api/v3/basics#item_export_formats).
 #' @param use_pinned_citation_keys Whether or not to restore citation keys from
 #'   Zotero's `Extra` field and use them as item identifiers. Only relevant
 #'   for `format = "csljson"`. See section *Citation keys* for details.
