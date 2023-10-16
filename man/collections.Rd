@@ -7,17 +7,27 @@
 collections(...)
 }
 \arguments{
-\item{...}{passed to \code{\link[=zotero_api]{zotero_api()}}}
+\item{...}{Further arguments passed on to \code{\link[=zotero_api]{zotero_api()}}}
 }
 \value{
-Data frame with columns:
+A \link[tibble:tbl_df-class]{tibble} with columns:
 \itemize{
-\item \code{key} - collection key
-\item \code{name} - collection name
-\item \code{parent} - key of the parent collection or \code{NA}
+\item \code{key}: Collection key.
+\item \code{name}: Collection name.
+\item \code{parent_key}: Key of the parent collection (\code{NA} if no parent collection exists).
 }
+
+Note that the tibble is of length \code{0} if the Zotero library's content
+hasn't changed since the version number specified in \code{modified_since}.
+Otherwise it has a \code{version} \link[=attr]{attribute} set to the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned
+by the API.
+
+See section \emph{Caching} in \code{\link[=zotero_api]{zotero_api()}} for further details.
 }
 \description{
-Fetch all collections of a Zotero user with their keys and keys of parent
-collections (if any).
+Fetch all collections of a Zotero user or group library with their keys and
+keys of parent collections (if any).
+}
+\examples{
+collections(user = zotero_group_id(id = 197065))
 }

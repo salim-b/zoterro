@@ -7,39 +7,97 @@
 zotero_api(
   base_url = "https://api.zotero.org",
   query = NULL,
+  fetch_subsequent = TRUE,
   path = NULL,
   user = zotero_usr(),
+  api_key = zotero_key(),
+  modified_since = NULL,
+  verbose = getOption("zoterro.verbose", FALSE),
   ...
 )
 }
 \arguments{
-\item{base_url}{API URL}
+\item{base_url}{Base URL of the \href{https://www.zotero.org/support/dev/web_api/v3/basics#base_url}{Zotero Web API}.}
 
-\item{path, query}{passed to \code{\link[=modify_url]{modify_url()}}}
+\item{query}{A named list of \href{https://www.zotero.org/support/dev/web_api/v3/basics#general_parameters}{Zotero Web API URL parameters},
+passed on to \code{\link[httr:modify_url]{httr::modify_url()}}.
 
-\item{user}{object returned by \code{\link[=zotero_user_id]{zotero_user_id()}} or \code{\link[=zotero_group_id]{zotero_group_id()}}}
+Note that the maximum \code{limit} is \code{100} results. Set
+\code{fetch_subsequent = TRUE} (default) to retrieve all results.}
 
-\item{...}{For \code{\link[=zotero_api]{zotero_api()}} passed to \code{\link[httr:GET]{httr::GET()}}.}
+\item{fetch_subsequent}{Whether or not to also retrieve results beyond
+\code{query$start + query$limit}.}
+
+\item{path}{\href{https://www.zotero.org/support/dev/web_api/v3/basics#resources}{Zotero Web API resource path}
+without the \verb{<userOrGroupPrefix>/}. e.g. \code{items/top}.}
+
+\item{user}{Object returned by \code{\link[=zotero_user_id]{zotero_user_id()}} or \code{\link[=zotero_group_id]{zotero_group_id()}}.}
+
+\item{api_key}{Personal \href{https://www.zotero.org/support/dev/web_api/v3/basics#authentication}{Zotero Web API key}.
+See \code{\link[=zotero_key]{zotero_key()}}. If \code{NULL}, authentication is omitted, resulting in
+limited access to public Zotero libraries only.}
+
+\item{modified_since}{Optional \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number}. If the
+Zotero library's content hasn't changed since the specified version
+number, a zero-length \link[=raw]{raw vector} will be returned instead of the
+actual library content (and the performed API request will be
+significantly faster). See section \emph{Caching} below for further details.}
+
+\item{verbose}{Whether or not to print called API URLs to the console.}
+
+\item{...}{Further arguments passed on to \code{\link[httr:RETRY]{httr::RETRY()}}.}
 }
 \value{
-List of \code{response} objects (c.f. \code{\link[httr:GET]{httr::GET()}}).
+If \code{modified_since = NULL} or the Zotero library's content has changed since
+the specified \code{modified_since} version, a list of
+\code{\link[httr:response]{response}} objects. Otherwise, a zero-length \link[=raw]{raw vector}.
+
+In both cases, the returned object has a \code{version} \link[=attr]{attribute} set to
+the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned by
+the API.
 }
 \description{
 Fetch data from Zotero using API ver. 3. If the result is broken into
 multiple parts, multiple requests are made to fetch everything.
 }
 \details{
-The \code{user} argument expects Zotero user or group ID. Use \code{\link[=zotero_user_id]{zotero_user_id()}}
+The \code{user} argument expects a Zotero user or group ID. Use \code{\link[=zotero_user_id]{zotero_user_id()}}
 or \code{\link[=zotero_group_id]{zotero_group_id()}} to pass it. By default \code{\link[=zotero_usr]{zotero_usr()}} is called which
-fetches the ID from the option or the environment variable.
+fetches the ID from the \R option \code{zoterro.user} or the environment variable
+\code{ZOTERO_USER}.
 
 The URL of the request will contain the appropriate user/group ID prefix
 which will be combined with \code{path} or \code{query} when supplied.
 
-The function is responsive to the following options:
+By default, \code{zotero_api()} respects the following \R options:
 \itemize{
-\item \code{zoterro.verbose} - (default \code{FALSE}) give more feedback when running
-\item \code{zoterro.sleep} - (default 1) sleep time between requests, see \code{\link[=Sys.sleep]{Sys.sleep()}}
+\item \strong{\code{zoterro.user}} (defaults to \code{\link[=zotero_usr]{zotero_usr()}}): Zotero user ID.
+\item \strong{\code{zoterro.key}} (defaults to \code{\link[=zotero_key]{zotero_key()}}): Personal \href{https://www.zotero.org/support/dev/web_api/v3/basics#authentication}{Zotero Web API key}.
+\item \strong{\code{zoterro.verbose}} (defaults to \code{FALSE}): Whether or not to print
+called API URLs to the console.
+}
+\subsection{Caching}{
+
+As the \href{https://www.zotero.org/support/dev/web_api/v3/basics#caching}{official API documentation states},
+"every Zotero library and object (collection, item, etc.) on the server has
+an associated version number. The version number can be used to determine
+whether a client has up-to-date data for a library or object, allowing for
+efficient and safe syncing."
+
+\code{zotero_api()} supports this caching mechanism via the \code{modified_since}
+parameter. If the Zotero library's content hasn't changed since the version
+number specified in \code{modified_since}, a zero-length \link[=raw]{raw vector} will
+be returned instead of the actual library content. In this case, the
+performed API request will be significantly faster since the body is omitted
+in the corresponding HTTP response.
+
+Otherwise, the object returned by \code{zotero_api()} has a \code{version}
+\link[=attr]{attribute} set to the \href{https://www.zotero.org/support/dev/web_api/v3/syncing}{Zotero library version number} returned by
+the API (corresponding to the current version number of the library (for
+multi-object requests) or object (for single-object requests)). You could
+provide this number as the \code{modified_since} argument to subsequent
+\code{zotero_api()} calls in order to use the API more efficiently (and thereby
+implement some form of caching).
 }
 }
 \examples{
@@ -48,6 +106,6 @@ The function is responsive to the following options:
 zotero_api(path = "groups")
 
 # Fetch top-level collections for the group with ID=12345
-zotero_api(path="collections/top", user=zotero_group_id(12345))
+zotero_api(path = "collections/top", user = zotero_group_id(12345))
 }
 }
