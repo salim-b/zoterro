@@ -143,7 +143,13 @@ zotero_api <- function(
     result <- c(result, list(resp))
   }
 
-  result <- parse_results(result)
+  if (isTRUE(query$format == "csljson")) {
+    class(result) <- "zotero_csljson"
+  }
+
+  if (httr::has_content(result[[1L]])) {
+    result <- parse_results(result)
+  }
   attr(result, which = "version") <- version
   result
 }
@@ -275,9 +281,31 @@ pretty_links <- function(x) {
 #' @keywords internal
 parse_results <- function(x, ...) UseMethod("parse_results")
 
-# By default extract content
+# By default, extract and combine JSON content
 parse_results.default <- function(x, ...) {
   do.call("c", lapply(x, content))
+}
+
+# For CSL-JSON, extract and combine content
+parse_results.zotero_csljson <- function(x, ...) {
+
+  result <-
+    purrr::map(x,
+             \(r) jsonlite::fromJSON(txt = httr::content(x = r,
+                                                         as = "text",
+                                                         encoding = "UTF-8"),
+                                     simplifyVector = FALSE)) |>
+    # merge top-level list elements
+    purrr::reduce(\(l_merged, l_next) {
+
+      c(names(l_merged),
+        names(l_next)) |>
+        unique() |>
+        purrr::map(\(name) rlang::list2(!!name := c(l_merged[[name]], l_next[[name]])))
+    }) |>
+    dplyr::first()
+
+  result
 }
 
 

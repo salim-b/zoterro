@@ -176,17 +176,15 @@ write_bib <- function(collection_key = NULL,
 
   # convert from raw to character if necessary
   # (affects all formats other than "wikipedia")
+  # UPDATE 2023-10-16: most likely obsolete or broken due to changes in `parse_results()`
   if (is.raw(result)) result <- rawToChar(result)
 
   # post-process "csljson" format
   if (format == "csljson" && !is.null(version)) {
-    # remove enwrapping `{"items": ...}`
-    result <- stringi::stri_extract(result, regex = "\\[[\\S\\s]*\\]")
 
     # restore pinned citation keys if requested
     if (use_pinned_citation_keys) {
-      result <- result %>%
-        jsonlite::fromJSON(simplifyVector = FALSE) %>%
+      result$items %<>%
         purrr::map(~ {
           citation_key <- stringi::stri_extract(
             str = .x$note,
@@ -198,20 +196,17 @@ write_bib <- function(collection_key = NULL,
           }
           .x
         }) %>%
-        jsonlite::toJSON(auto_unbox = TRUE)
+        # remove all `items` that don't have a `citation-key` set
+        # (attachments like PDFs and robust links are included as items with `type = "article"` which is most likely a bug in the Zotero API)
+        purrr::keep(\(x) utils::hasName(x, "citation-key"))
     }
-
-    # ensure (single) trailing newline (POSIX compliance)
-    result <- stringi::stri_replace(
-      str = result,
-      regex = "(\\s+)?$",
-      replacement = "\n"
-    )
   }
 
   if (!is.null(version)) {
 
-    cat(result, file = path)
+    result$items |>
+      jsonlite::toJSON(auto_unbox = TRUE) |>
+      brio::write_file(path = path)
 
   } else {
     result <- character()
